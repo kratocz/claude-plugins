@@ -1,0 +1,15 @@
+{
+  "name": "kratocz",
+  "owner": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-notify",
+      "source": { "source": "github", "repo": "kratocz/claude-code-notify" },
+      "description": "Desktop notifications when Claude Code waits for your response or approval",
+      "version": "1.0.0"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# macOS
+.DS_Store
+
+# Linux
+*~
