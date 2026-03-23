@@ -6,8 +6,8 @@
   },
   "plugins": [
     {
-      "name": "claude-code-notify",
-      "source": { "source": "github", "repo": "kratocz/claude-code-notify" },
+      "name": "desktop-notify",
+      "source": { "source": "github", "repo": "kratocz/desktop-notify" },
       "description": "Desktop notifications when Claude Code waits for your response or approval",
       "version": "1.0.0"
     }

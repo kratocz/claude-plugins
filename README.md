@@ -12,10 +12,10 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Description |
 |---|---|
-| [claude-code-notify](https://github.com/kratocz/claude-code-notify) | Desktop notifications when Claude Code waits for your response or approval |
+| [desktop-notify](https://github.com/kratocz/desktop-notify) | Desktop notifications when Claude Code waits for your response or approval |
 
 ## Install a plugin
 
 ```
-/plugin install claude-code-notify@kratocz
+/plugin install desktop-notify@kratocz
 ```
