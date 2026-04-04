@@ -10,6 +10,12 @@
       "source": { "source": "github", "repo": "kratocz/desktop-notify" },
       "description": "Desktop notifications when Claude Code waits for your response or approval",
       "version": "1.0.0"
+    },
+    {
+      "name": "second-opinion",
+      "source": { "source": "github", "repo": "kratocz/second-opinion" },
+      "description": "Get a second opinion from Gemini or GPT on any important topic or decision",
+      "version": "1.0.0"
     }
   ]
 }
