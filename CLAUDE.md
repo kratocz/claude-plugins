@@ -23,11 +23,16 @@ Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
   "name": "my-new-plugin",
   "source": { "source": "github", "repo": "kratocz/my-new-plugin" },
   "description": "Short description",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "added": "YYYY-MM-DD"
 }
 ```
 
 Each plugin lives in its own GitHub repository. This marketplace repo is just a catalog.
+
+Also update `README.md`:
+1. Add a row to the **Available plugins** table (keep alphabetical order).
+2. Prepend the plugin to the **Recently added** section (newest first); keep at most 3 entries — remove the oldest one if the list would exceed 3.
 
 ## Marketplace name
 
