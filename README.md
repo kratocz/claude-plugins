@@ -22,6 +22,6 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 ```
 /plugin install session-tracker@kratocz
-/plugin install desktop-notify@kratocz
 /plugin install second-opinion@kratocz
+/plugin install desktop-notify@kratocz
 ```
