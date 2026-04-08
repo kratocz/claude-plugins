@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "session-tracker",
+      "source": { "source": "github", "repo": "kratocz/session-tracker" },
+      "description": "Start and stop time tracking sessions in Toggl Track or Clockify",
+      "version": "1.0.0",
+      "added": "2026-04-09"
+    },
+    {
       "name": "desktop-notify",
       "source": { "source": "github", "repo": "kratocz/desktop-notify" },
       "description": "Desktop notifications when Claude Code waits for your response or approval",
