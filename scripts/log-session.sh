@@ -50,7 +50,8 @@ if [ -z "$STARTED" ]; then
   exit 0
 fi
 
-DATE=$(date -u -d "$STARTED" +%Y-%m-%d 2>/dev/null || date -u +%Y-%m-%d)
+DATE="${STARTED%%T*}"                           # "2026-04-18T06:27:12Z" → "2026-04-18"
+[ -z "$DATE" ] && DATE=$(date -u +%Y-%m-%d)    # fallback: no timestamp in transcript
 DURATION=$(format_duration "$STARTED" "$ENDED")
 TURNS=$(count_turns "$TRANSCRIPT")
 GOAL=$(extract_goal "$TRANSCRIPT")

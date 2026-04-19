@@ -59,7 +59,7 @@ Still, don't copy summary files into repositories you publish without review.
 | Platform | Support | Notes |
 |----------|:-------:|-------|
 | Linux | 🟢 Full | |
-| macOS | 🟡 Partial | Duration calculation requires GNU date: `brew install coreutils`. All other features work. |
+| macOS | 🟢 Full | |
 | Windows | 🔴 None | Use WSL — inside WSL it works like Linux. |
 
 ## Requirements
@@ -67,7 +67,6 @@ Still, don't copy summary files into repositories you publish without review.
 - Claude Code `>= 2.1.78` (for `${CLAUDE_PLUGIN_DATA}` support)
 - `bash`
 - `jq`
-- GNU `date` (standard on Linux; on macOS install via `brew install coreutils`)
 
 The plugin runs as a fire-and-forget `SessionEnd` hook — it never blocks Claude Code and never writes anywhere outside its own data directory.
 

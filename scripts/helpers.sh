@@ -32,14 +32,29 @@ extract_goal() {
   ' "$transcript" 2>/dev/null | head -1 | jq -r '.' 2>/dev/null | cut -c1-300
 }
 
+# Convert an ISO 8601 timestamp to Unix epoch — portable across Linux and macOS.
+# Handles milliseconds (.NNN) and Z/+HH:MM timezone suffixes.
+_to_epoch() {
+  local ts="${1%%.*}"    # strip milliseconds: "...T06:27:12.158Z" → "...T06:27:12Z"
+  ts="${ts%Z}"           # strip trailing Z: "...T06:27:12Z" → "...T06:27:12"
+  ts="${ts%%+*}"         # strip +HH:MM offset if present
+  if command -v gdate &>/dev/null; then          # GNU coreutils (brew install coreutils)
+    gdate -d "$ts" +%s 2>/dev/null
+  elif [[ "${OSTYPE:-}" == "darwin"* ]]; then    # stock macOS BSD date
+    date -j -u -f "%Y-%m-%dT%H:%M:%S" "$ts" +%s 2>/dev/null
+  else                                            # GNU date on Linux
+    date -d "$ts" +%s 2>/dev/null
+  fi
+}
+
 # Human-readable duration between two ISO timestamps.
 # Returns "1h23m" / "42m" / "15s" form.
 format_duration() {
   local start_ts="$1"
   local end_ts="$2"
   local start_epoch end_epoch secs h m s
-  start_epoch=$(date -d "$start_ts" +%s 2>/dev/null) || return
-  end_epoch=$(date -d "$end_ts" +%s 2>/dev/null) || return
+  start_epoch=$(_to_epoch "$start_ts") || return
+  end_epoch=$(_to_epoch "$end_ts") || return
   secs=$((end_epoch - start_epoch))
   [ "$secs" -lt 0 ] && secs=0
   h=$((secs / 3600))
