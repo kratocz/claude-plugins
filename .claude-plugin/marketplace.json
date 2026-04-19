@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "session-log",
+      "source": { "source": "github", "repo": "kratocz/session-log" },
+      "description": "Save a structured summary of each Claude Code session to a markdown file",
+      "version": "1.0.0",
+      "added": "2026-04-19"
+    },
+    {
       "name": "session-tracker",
       "source": { "source": "github", "repo": "kratocz/session-tracker" },
       "description": "Start and stop time tracking sessions in Toggl Track or Clockify",
