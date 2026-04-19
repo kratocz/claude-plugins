@@ -1,0 +1,13 @@
+{
+  "name": "session-log",
+  "version": "1.0.0",
+  "description": "Save a structured summary of each Claude Code session to a markdown file",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  },
+  "homepage": "https://github.com/kratocz/session-log",
+  "repository": "https://github.com/kratocz/session-log",
+  "license": "MIT",
+  "keywords": ["session", "log", "summary", "hooks", "productivity", "markdown"]
+}
