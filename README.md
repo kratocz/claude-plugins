@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [mikrotik-audit](https://github.com/kratocz/mikrotik-audit) | 🟢 | 🟢 | 🔴 | Read-only security audit for Mikrotik RouterOS devices via SSH | 2026-04-20 |
 | [session-log](https://github.com/kratocz/session-log) | 🟢 | 🟢 | 🔴 | Save a structured summary of each Claude Code session to a markdown file | 2026-04-19 |
 | [session-tracker](https://github.com/kratocz/session-tracker) | 🟢 | 🟢 | 🟡 | Start and stop time tracking sessions in Toggl Track or Clockify | 2026-04-09 |
 | [second-opinion](https://github.com/kratocz/second-opinion) | 🟢 | 🟢 | 🟡 | Get a second opinion from Gemini or GPT on any important topic or decision | 2026-04-04 |
@@ -24,6 +25,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install mikrotik-audit@kratocz
 /plugin install session-log@kratocz
 /plugin install session-tracker@kratocz
 /plugin install second-opinion@kratocz

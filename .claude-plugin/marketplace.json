@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "mikrotik-audit",
+      "source": { "source": "github", "repo": "kratocz/mikrotik-audit" },
+      "description": "Read-only security audit for Mikrotik RouterOS devices via SSH",
+      "version": "0.1.0",
+      "added": "2026-04-20"
+    },
+    {
       "name": "session-log",
       "source": { "source": "github", "repo": "kratocz/session-log" },
       "description": "Save a structured summary of each Claude Code session to a markdown file",
