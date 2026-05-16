@@ -1,0 +1,64 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"🤖 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"⚡ $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"💬 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"💬 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"🤖 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+          }
+        ]
+      }
+    ]
+  }
+}
