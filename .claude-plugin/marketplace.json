@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "tmux-hooks",
+      "source": { "source": "github", "repo": "kratocz/tmux-hooks" },
+      "description": "Set tmux pane title to reflect Claude Code lifecycle state",
+      "version": "1.0.0",
+      "added": "2026-05-16"
+    },
+    {
       "name": "mikrotik-audit",
       "source": { "source": "github", "repo": "kratocz/mikrotik-audit" },
       "description": "Read-only security audit for Mikrotik RouterOS devices via SSH",
