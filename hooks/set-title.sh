@@ -1,7 +1,11 @@
 #!/bin/sh
-# Set tmux pane title to: <emoji> <project> [(<branch>)]
+# Publish "<emoji> <project> [(<branch>)]" to the tmux pane-local user
+# option @claude_info, so the user's pane-border-format can show it
+# alongside Claude Code's own pane_title (which carries the spinner +
+# conversation summary).
+#
 # Usage: set-title.sh [emoji]
-# Empty/missing emoji clears the title (used on SessionEnd).
+# Empty/missing emoji clears @claude_info (used on SessionEnd).
 # No-op when not running inside tmux.
 
 [ -n "$TMUX_PANE" ] || exit 0
@@ -9,17 +13,15 @@
 emoji=$1
 
 if [ -z "$emoji" ]; then
-    title=""
+    info=""
 else
     proj=$(basename "$CLAUDE_PROJECT_DIR")
     branch=$(git -C "$CLAUDE_PROJECT_DIR" symbolic-ref --short HEAD 2>/dev/null)
     if [ -n "$branch" ]; then
-        title="$emoji $proj ($branch)"
+        info="$emoji $proj ($branch)"
     else
-        title="$emoji $proj"
+        info="$emoji $proj"
     fi
 fi
 
-cur=$(tmux display-message -p '#{pane_id}')
-tmux select-pane -t "$TMUX_PANE" -T "$title"
-[ "$cur" != "$TMUX_PANE" ] && tmux select-pane -t "$cur" || true
+tmux set-option -p -t "$TMUX_PANE" @claude_info "$info"
