@@ -11,7 +11,7 @@ Set the tmux pane title to reflect the current Claude Code lifecycle state. At a
 | 💬 | `Notification`, `PermissionRequest` | Waiting for your attention |
 | *(empty)* | `SessionEnd` | Session over |
 
-The project directory name (`$(basename $CLAUDE_PROJECT_DIR)`) is appended to each state.
+Each title also includes the project directory name (`basename $CLAUDE_PROJECT_DIR`) and, when the project is a git repository, the current branch in parentheses — e.g. `🤖 tmux-hooks (main)`.
 
 ## Installation
 

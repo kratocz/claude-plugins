@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"🤖 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh 🤖"
           }
         ]
       }
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"⚡ $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh ⚡"
           }
         ]
       }
@@ -25,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"💬 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh 💬"
           }
         ]
       }
@@ -35,7 +35,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"💬 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh 💬"
           }
         ]
       }
@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"🤖 $(basename \"$CLAUDE_PROJECT_DIR\")\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh 🤖"
           }
         ]
       }
@@ -55,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$TMUX_PANE\" ] || exit 0; cur=$(tmux display-message -p '#{pane_id}'); tmux select-pane -t \"$TMUX_PANE\" -T \"\"; [ \"$cur\" != \"$TMUX_PANE\" ] && tmux select-pane -t \"$cur\" || true"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/set-title.sh"
           }
         ]
       }
