@@ -1,0 +1,9 @@
+{
+  "name": "ntit-common",
+  "version": "0.1.0",
+  "description": "NTIT Group shared Claude Code context: company conventions, ClickUp MCP, escalation paths",
+  "author": {
+    "name": "NTIT Group",
+    "url": "https://www.ntit.cz/"
+  }
+}
