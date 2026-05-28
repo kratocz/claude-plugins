@@ -26,6 +26,31 @@ When the user mentions a ticket without context, search in ClickUp via `clickup_
 - **Force push to `main`:** never
 - **Skip hooks (`--no-verify`):** never without explicit user consent
 
+## Code review
+
+Applies to `/review`, `/ultrareview`, and manual PR comments.
+
+- **Comment language:** English (consistent with PR titles, commits, and code)
+- **Tone:** Constructive and specific. Reference lines as `path/to/file.ext:42`. Suggest, don't dictate.
+- **Severity prefix** — start every comment with one of:
+  - `blocking:` — must fix before merge (correctness, security, broken API contract)
+  - `suggestion:` — worth considering; author decides
+  - `nit:` — minor preference, non-blocking
+  - `question:` — clarification request, not a change request
+  - `out-of-scope:` — pre-existing issue outside the diff; flag once, don't block on it
+- **Focus on:**
+  - **Correctness** — does the diff do what the PR description claims? Edge cases? Error paths?
+  - **Security** — committed secrets, injection, missing authn/authz, unsafe deserialization (see [Security and sensitive data](#security-and-sensitive-data))
+  - **Tests** — appropriate coverage? For bug fixes, a regression test that fails without the fix?
+  - **Maintainability** — naming, complexity, dead code, leaky abstractions
+- **Skip:** style nits a formatter/linter would catch (fix in CI tooling instead) and personal taste not codified in project conventions
+- **Process:**
+  - Authors self-review their own diff before requesting review
+  - At least 1 approving review required before merge
+  - No self-approval; authors don't merge without an approving review
+  - All `blocking:` comments resolved (or explicitly waived by the reviewer) before merge
+  - CI must be green before merge
+
 ## Security and sensitive data
 
 - Passwords, API keys, OAuth tokens and `.env` files: **never** commit them or send them to external services (pastebin, gist, AI tools outside of Claude Code).
