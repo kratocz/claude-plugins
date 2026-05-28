@@ -41,9 +41,10 @@ When invoked, follow this procedure in order:
 
 11. **Third verification pass:** final check of everything to avoid wasting the author's time on inaccuracies.
 
-12. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead.
+12. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead. **If there are no `Cx`/`Mx` blockers, also offer the "approve & merge" option** (see step 13).
 
 13. **After approval, post to GitHub:**
     - Each `Cx` and `Mx` finding → its own inline comment (or a standalone comment if inline isn't possible).
     - A summary comment with: an overview of all findings (including counts/lists for `mx` and `nx`), thanks to the author, a note of praise, and clear instructions — what **must** be fixed (`Cx`, `Mx`), what should be **attempted** if easy (`mx`), and what is **optional** (`nx`).
     - **All GitHub comments in English.**
+    - **Approve & merge:** if no `Cx`/`Mx` findings remain (no unresolved blockers) **and** the user pre-authorised it together with the go-ahead in step 12, after posting the comments also submit an **Approve** verdict and merge the PR (per the project's merge style).
