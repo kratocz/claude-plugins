@@ -28,27 +28,29 @@ When the user mentions a ticket without context, search in ClickUp via `clickup_
 
 ## Code review
 
-Applies to `/review`, `/ultrareview`, and manual PR comments.
+Applies to `/review`, `/ultrareview`, and manual PR comments. **If a project's own conventions (`AGENTS.md`/`CLAUDE.md`) conflict with the rules below, follow the project's rules.**
 
 - **Comment language:** English (consistent with PR titles, commits, and code)
 - **Tone:** Constructive and specific. Reference lines as `path/to/file.ext:42`. Suggest, don't dictate.
-- **Severity prefix** — start every comment with one of:
-  - `blocking:` — must fix before merge (correctness, security, broken API contract)
-  - `suggestion:` — worth considering; author decides
-  - `nit:` — minor preference, non-blocking
-  - `question:` — clarification request, not a change request
-  - `out-of-scope:` — pre-existing issue outside the diff; flag once, don't block on it
+- **Severity codes** — label every finding with `C1`, `C2`, `M1`, `m1`, `n1`, etc., numbered within its severity:
+  - `Cx` — **critical**, blocking. Severe correctness/security issue, broken API contract.
+  - `Mx` — **major**, blocking. Significant bug, missing essential tests, serious design issue.
+  - `mx` — **minor**, non-blocking. Author should fix if easy.
+  - `nx` — **nit**, optional.
+- **Reviewer verdict:** any `Cx` or `Mx` → "Request changes". Otherwise → "Approve" (with comments).
 - **Focus on:**
   - **Correctness** — does the diff do what the PR description claims? Edge cases? Error paths?
   - **Security** — committed secrets, injection, missing authn/authz, unsafe deserialization (see [Security and sensitive data](#security-and-sensitive-data))
   - **Tests** — appropriate coverage? For bug fixes, a regression test that fails without the fix?
   - **Maintainability** — naming, complexity, dead code, leaky abstractions
+- **PR title and description:**
+  - Suggesting a renamed PR title: mark as `nx` unless the current title is genuinely wrong
+  - Suggesting an expanded/clearer PR description: mark as `nx` unless the description is factually misleading
 - **Skip:** style nits a formatter/linter would catch (fix in CI tooling instead) and personal taste not codified in project conventions
 - **Process:**
-  - Authors self-review their own diff before requesting review
-  - At least 1 approving review required before merge
-  - No self-approval; authors don't merge without an approving review
-  - All `blocking:` comments resolved (or explicitly waived by the reviewer) before merge
+  - Authors re-read their own diff before merging or requesting review
+  - Reviews and merges are done by the **tech lead** (who may also review and merge their own PRs)
+  - All `Cx` and `Mx` findings resolved (or explicitly waived by the reviewer) before merge
   - CI must be green before merge
 
 ## Security and sensitive data
