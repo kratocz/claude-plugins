@@ -30,6 +30,8 @@ When the user mentions a ticket without context, search in ClickUp via `clickup_
 
 Applies to `/review`, `/ultrareview`, and manual PR comments. **If a project's own conventions (`AGENTS.md`/`CLAUDE.md`) conflict with the rules below, follow the project's rules.**
 
+The step-by-step procedure for *performing* a code review (CR title, timesheet, findings file, GitHub posting) lives in the `/ntit-common:code-review` skill — this section just captures the conventions.
+
 - **Comment language:** English (consistent with PR titles, commits, and code)
 - **Tone:** Constructive and specific. Reference lines as `path/to/file.ext:42`. Suggest, don't dictate.
 - **Severity codes** — label every finding with `C1`, `C2`, `M1`, `m1`, `n1`, etc., numbered within its severity:
@@ -52,48 +54,6 @@ Applies to `/review`, `/ultrareview`, and manual PR comments. **If a project's o
   - Reviews and merges are done by the **tech lead** (who may also review and merge their own PRs)
   - All `Cx` and `Mx` findings resolved (or explicitly waived by the reviewer) before merge
   - CI must be green before merge
-
-## Performing a code review
-
-When the user asks for a code review, follow this procedure:
-
-1. **Identify the target.** A specific PR? A branch? Something else? If unclear, ask the user first.
-
-2. **Check for prior review rounds.** Look at the target's history — existing review comments and any prior findings file in `docs.local/`.
-   - No prior CR → proceed.
-   - Prior CR exists → review only the new changes since (new commits, new discussion).
-   - Prior CR exists and there are no new changes → tell the user and skip the CR; the author hasn't addressed earlier findings yet.
-
-3. **Pick a CR title and start timesheet logging.**
-   - Decide a short, descriptive title for this CR.
-   - If the user tracks time (Toggl, Clockify, ClickUp time tracking, etc. — they may have specific timesheet instructions in their global or project `CLAUDE.md`), start a new timer/entry for this CR using that title.
-   - If a timesheet session is already running, ask the user whether to stop it and start a new one for this CR, or leave the current one running.
-
-4. **Produce findings.** Label each one with a severity code (`C1`, `C2`, `M1`, `m1`, `n1`, …). If a finding needs a new category (e.g. off-topic), propose it to the user with a suggested letter prefix.
-   - Write the findings to a file in `docs.local/` at the project root; content in English.
-   - The file starts with a header: metadata (author, reviewer, date, PR/branch reference) **plus a short summary of the changes — in your own words, based on what you actually found in the diff** (not a copy of the PR description).
-   - If `docs.local/` doesn't exist, ask the user whether to create it and add it to the project `.gitignore`.
-
-5. **Re-check severity.** Is each finding labelled at the right level (`Cx`/`Mx`/`mx`/`nx`)?
-
-6. **Re-check for false positives.** Common. Remove the finding or downgrade its severity.
-
-7. **Add line references** to each finding where it makes sense (`file:line` or `file:start-end`).
-
-8. **Add a fix snippet** to each finding where it makes sense — a code change the author can apply with one click.
-
-9. **Re-verify line numbers** against the actual file state; they often drift between earlier passes.
-
-10. **Second verification pass:** for each finding, re-check severity, false-positive risk, line references, and suggested code.
-
-11. **Third verification pass:** final check of everything to avoid wasting the author's time on inaccuracies.
-
-12. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead.
-
-13. **After approval, post to GitHub:**
-    - Each `Cx` and `Mx` finding → its own inline comment (or a standalone comment if inline isn't possible).
-    - A summary comment with: an overview of all findings (including counts/lists for `mx` and `nx`), thanks to the author, a note of praise, and clear instructions — what **must** be fixed (`Cx`, `Mx`), what should be **attempted** if easy (`mx`), and what is **optional** (`nx`).
-    - **All GitHub comments in English.**
 
 ## Security and sensitive data
 
