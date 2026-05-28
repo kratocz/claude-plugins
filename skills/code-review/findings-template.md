@@ -70,6 +70,8 @@
 
 ## Overall verdict
 
+> This section is the source for the GitHub summary comment posted in step 14 of the skill.
+
 - **GitHub verdict:** Request changes / Approve (with comments)
 - **Counts:** `<N> critical, <N> major, <N> minor, <N> nits`
 - **Notes for the author:** <one short paragraph: thanks, praise where deserved, what must be fixed (Cx/Mx), what should be attempted if easy (mx), what is optional (nx)>

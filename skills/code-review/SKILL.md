@@ -25,7 +25,7 @@ When invoked, follow this procedure in order:
 
 4. **Produce findings.** Label each one with a severity code (`C1`, `C2`, `M1`, `m1`, `n1`, …). If a finding needs a new category (e.g. off-topic), propose it to the user with a suggested letter prefix.
    - Write the findings to a file in `docs.local/` at the project root; content in English.
-   - **Filename:** `cr-pr-<number>-round-<N>.md` for PR targets, or `cr-<slug>-round-<N>.md` for branches/other targets. **Each review round is a new file** — don't append to a prior round's file.
+   - **Filename:** `cr-pr-<number>-round-<N>.md` for PR targets, or `cr-<slug>-round-<N>.md` for branches/other targets (slug = branch name lowercased and hyphenated, or another short identifier). **Each review round is a new file** — don't append to a prior round's file.
    - The file starts with a header: metadata (author, reviewer, date, PR/branch reference, round number) **plus a short summary of the changes — in your own words, based on what you actually found in the diff** (not a copy of the PR description).
    - A template is bundled with this skill at `${CLAUDE_SKILL_DIR}/findings-template.md` — use it as a starting point.
    - **Round 2+:** include a `## Status of prior findings` section in the new file listing every finding from prior rounds with its current status — **resolved** (author fixed it), **still open** (not addressed), or **waived** (author justified leaving it; include the justification). The latest round's file is then the canonical source of which blockers remain.
