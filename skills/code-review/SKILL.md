@@ -18,7 +18,7 @@ When invoked, follow this procedure in order:
    - If ambiguous or no match, ask the user: a specific PR? A branch? Something else?
    - If the target references a ClickUp ticket (e.g. `CU-XXXX` in the PR title, branch name, or description), pull the ticket via the ClickUp MCP — its scope informs the "does the diff do what the PR description claims" check.
 
-2. **Gather inputs and check for prior CR rounds.** Read everything relevant: all commits on the target, the PR description, all existing review and discussion comments (including author replies), and any prior findings files in `docs.local/` matching `cr-pr-<number>-*.md` (PR targets) or `cr-<slug>-*.md` (branches/other targets).
+2. **Gather inputs and check for prior CR rounds.** Read everything relevant: all commits on the target, the PR description, all existing review and discussion comments (including author replies), and any prior findings files in `docs.local/code-reviews/` matching `cr-pr-<number>-*.md` (PR targets) or `cr-<slug>-*.md` (branches/other targets).
    - No prior CR → proceed.
    - Prior CR exists → review only the new changes since (new commits, new discussion). **Read author replies to prior findings carefully** — don't re-flag what's been justified or resolved.
    - Prior CR exists and there are no new changes → tell the user and skip the CR; the author hasn't addressed earlier findings yet.
@@ -29,12 +29,12 @@ When invoked, follow this procedure in order:
    - If a timesheet session is already running, ask the user whether to stop it and start a new one for this CR, or leave the current one running.
 
 4. **Produce findings.** Label each one with a severity code (`C1`, `C2`, `M1`, `m1`, `n1`, …). If a finding needs a new category (e.g. off-topic), propose it to the user with a suggested letter prefix.
-   - Write the findings to a file in `docs.local/` at the project root; content in English.
+   - Write the findings to a file in `docs.local/code-reviews/` at the project root; content in English.
    - **Filename:** `cr-pr-<number>-round-<N>.md` for PR targets, or `cr-<slug>-round-<N>.md` for branches/other targets (slug = branch name lowercased and hyphenated, or another short identifier). **Each review round is a new file** — don't append to a prior round's file.
    - The file starts with a header: metadata (author, reviewer, date, PR/branch reference, round number) **plus a short summary of the changes — in your own words, based on what you actually found in the diff** (not a copy of the PR description).
    - A template is bundled with this skill at `${CLAUDE_SKILL_DIR}/findings-template.md` — use it as a starting point.
    - **Round 2+:** include a `## Status of prior findings` section in the new file listing every finding from prior rounds with its current status — **resolved** (author fixed it), **still open** (not addressed), or **waived** (author justified leaving it; include the justification). The latest round's file is then the canonical source of which blockers remain.
-   - If `docs.local/` doesn't exist, ask the user whether to create it and add it to the project `.gitignore`.
+   - If `docs.local/` doesn't exist, ask the user whether to create it (with the `code-reviews/` subdirectory) and add `docs.local/` to the project `.gitignore`. If `docs.local/` already exists but `code-reviews/` doesn't, just create the subdirectory.
 
 5. **Re-check severity.** Is each finding labelled at the right level (`Cx`/`Mx`/`mx`/`nx`)?
 
@@ -52,7 +52,7 @@ When invoked, follow this procedure in order:
 
 12. **Freshness re-check.** Re-fetch the target's commits and comments. If anything is new since you started the review (a new commit, a new comment, a new reply), extend the review to cover the new content — pass through steps 4–11 for the new material and revise existing findings in light of any new context — before continuing.
 
-13. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead. **If there are no findings at all, summarise briefly as LGTM and offer immediate Approve.** **If there are no `Cx`/`Mx` blockers, also offer the "approve & merge" option** (see step 14).
+13. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/code-reviews/` file with the full CR, and wait for the user's go-ahead. **If there are no findings at all, summarise briefly as LGTM and offer immediate Approve.** **If there are no `Cx`/`Mx` blockers, also offer the "approve & merge" option** (see step 14).
 
 14. **After approval, post to GitHub** (skip this step if the target is not a GitHub PR — the findings file is then the only deliverable):
     - Each `Cx` and `Mx` finding → its own inline comment (or a standalone comment if inline isn't possible).
