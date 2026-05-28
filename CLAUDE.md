@@ -51,7 +51,8 @@ The step-by-step procedure for *performing* a code review (CR title, timesheet, 
 - **Skip:** style nits a formatter/linter would catch (fix in CI tooling instead) and personal taste not codified in project conventions
 - **Process:**
   - Authors re-read their own diff before merging or requesting review
-  - Reviews and merges are done by the **tech lead** (who may also review and merge their own PRs). In practice, the user running the review (typically via the `/ntit-common:code-review` skill) acts as the reviewer.
+  - Who reviews what is decided informally within the team; reviewers may also review and merge their own PRs
+  - The reviewer may merge after their own Approve, provided the repo's required approval count is met (otherwise submit only the Approve and wait for additional approvals)
   - All `Cx` and `Mx` findings resolved (or explicitly waived by the reviewer) before merge
   - CI must be green before merge
 

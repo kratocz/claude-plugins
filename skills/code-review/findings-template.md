@@ -10,6 +10,15 @@
 
 <2–4 sentences in the reviewer's own words, based on the actual diff — not a copy of the PR description.>
 
+## Status of prior findings (round 2+ only — omit on round 1)
+
+> Carry over every finding from the previous round's file and mark its current status. This file is then the canonical source of unresolved blockers.
+> Status values: **resolved** (author fixed it), **still open** (not addressed), **waived** (author justified leaving it — include the justification).
+
+- `C1` from round <N-1> — **resolved**: <brief note on the fix>
+- `M1` from round <N-1> — **still open**: <why still relevant>
+- `m1` from round <N-1> — **waived**: <author's justification>
+
 ## Findings
 
 > Severity codes — see `## Code review` in the plugin's `CLAUDE.md` for the full convention.

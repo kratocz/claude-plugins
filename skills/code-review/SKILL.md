@@ -28,6 +28,7 @@ When invoked, follow this procedure in order:
    - **Filename:** `cr-pr-<number>-round-<N>.md` for PR targets, or `cr-<slug>-round-<N>.md` for branches/other targets. **Each review round is a new file** — don't append to a prior round's file.
    - The file starts with a header: metadata (author, reviewer, date, PR/branch reference, round number) **plus a short summary of the changes — in your own words, based on what you actually found in the diff** (not a copy of the PR description).
    - A template is bundled with this skill at `${CLAUDE_SKILL_DIR}/findings-template.md` — use it as a starting point.
+   - **Round 2+:** include a `## Status of prior findings` section in the new file listing every finding from prior rounds with its current status — **resolved** (author fixed it), **still open** (not addressed), or **waived** (author justified leaving it; include the justification). The latest round's file is then the canonical source of which blockers remain.
    - If `docs.local/` doesn't exist, ask the user whether to create it and add it to the project `.gitignore`.
 
 5. **Re-check severity.** Is each finding labelled at the right level (`Cx`/`Mx`/`mx`/`nx`)?
@@ -46,11 +47,12 @@ When invoked, follow this procedure in order:
 
 12. **Freshness re-check.** Re-fetch the target's commits and comments. If anything is new since you started the review (a new commit, a new comment, a new reply), extend the review to cover the new content — pass through steps 4–11 for the new material and revise existing findings in light of any new context — before continuing.
 
-13. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead. **If there are no `Cx`/`Mx` blockers, also offer the "approve & merge" option** (see step 14).
+13. **Summarise to the user** — e.g. `4 critical (C1,C2,C3,C4), 3 major (M1,M2,M3), 2 nits (n1,n2)`, mention the `docs.local/` file with the full CR, and wait for the user's go-ahead. **If there are no findings at all, summarise briefly as LGTM and offer immediate Approve.** **If there are no `Cx`/`Mx` blockers, also offer the "approve & merge" option** (see step 14).
 
 14. **After approval, post to GitHub** (skip this step if the target is not a GitHub PR — the findings file is then the only deliverable):
     - Each `Cx` and `Mx` finding → its own inline comment (or a standalone comment if inline isn't possible).
-    - A summary comment with: an overview of all findings (including counts/lists for `mx` and `nx`), thanks to the author, a note of praise, and clear instructions — what **must** be fixed (`Cx`, `Mx`), what should be **attempted** if easy (`mx`), and what is **optional** (`nx`).
+    - A summary comment with: an overview of all findings (including counts/lists for `mx` and `nx`), thanks to the author, **praise where deserved (skip rather than force a generic line)**, and clear instructions — what **must** be fixed (`Cx`, `Mx`), what should be **attempted** if easy (`mx`), and what is **optional** (`nx`).
     - **PR title / description `nx` findings:** include them in the summary comment as recommendations (GitHub has no inline slot for title or description).
     - **All GitHub comments in English.**
-    - **Approve & merge:** only if **all three** hold — (a) no `Cx`/`Mx` findings remain, (b) CI is green (treat a failing or pending CI as a blocker → don't merge; report the failing checks to the user instead), and (c) the user pre-authorised it together with the go-ahead in step 13. If so, after posting the comments also submit an **Approve** verdict and merge the PR using the repo's default merge button setting (squash / merge commit / rebase — ask the user if unsure).
+    - **Approve & merge:** only if **all four** hold — (a) no `Cx`/`Mx` findings remain unresolved **across all rounds** (check the latest round's `Status of prior findings` plus its new findings), (b) CI is green (treat a failing or pending CI as a blocker → don't merge; report the failing checks to the user instead), (c) the repo's required approval count would be met after your **Approve** (if not, still submit the Approve verdict but don't merge — tell the user how many more approvals are needed), and (d) the user pre-authorised it together with the go-ahead in step 13. If all four hold, after posting the comments also submit an **Approve** verdict and merge the PR using the repo's default merge button setting (squash / merge commit / rebase — ask the user if unsure).
+    - **Stop the timesheet entry** once posting (or the final summary for non-PR targets) is complete.
