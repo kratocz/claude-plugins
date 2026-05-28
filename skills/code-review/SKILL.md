@@ -5,7 +5,7 @@ description: Run an NTIT-style code review on a PR (or another target). Picks a 
 
 # NTIT code review workflow
 
-This skill executes a code review following NTIT conventions. The **conventions themselves** (severity codes, focus areas, comment language, tech-lead policy) live in the `## Code review` section of the plugin's `CLAUDE.md` — read that first; this skill is the **procedure** to follow.
+This skill executes a code review following NTIT conventions. The **conventions themselves** (severity codes, focus areas, comment language, review process) live in the `## Code review` section of the plugin's `CLAUDE.md` — read that first; this skill is the **procedure** to follow.
 
 When invoked, follow this procedure in order:
 
@@ -51,8 +51,10 @@ When invoked, follow this procedure in order:
 
 14. **After approval, post to GitHub** (skip this step if the target is not a GitHub PR — the findings file is then the only deliverable):
     - Each `Cx` and `Mx` finding → its own inline comment (or a standalone comment if inline isn't possible).
+    - `mx` and `nx` findings: default to the summary list (next bullet); inline is OK when the location really helps the author find the spot.
     - A summary comment with: an overview of all findings (including counts/lists for `mx` and `nx`), thanks to the author, **praise where deserved (skip rather than force a generic line)**, and clear instructions — what **must** be fixed (`Cx`, `Mx`), what should be **attempted** if easy (`mx`), and what is **optional** (`nx`).
     - **PR title / description `nx` findings:** include them in the summary comment as recommendations (GitHub has no inline slot for title or description).
     - **All GitHub comments in English.**
     - **Approve & merge:** only if **all four** hold — (a) no `Cx`/`Mx` findings remain unresolved **across all rounds** (check the latest round's `Status of prior findings` plus its new findings), (b) CI is green (treat a failing or pending CI as a blocker → don't merge; report the failing checks to the user instead), (c) the repo's required approval count would be met after your **Approve** (if not, still submit the Approve verdict but don't merge — tell the user how many more approvals are needed), and (d) the user pre-authorised it together with the go-ahead in step 13. If all four hold, after posting the comments also submit an **Approve** verdict and merge the PR using the repo's default merge button setting (squash / merge commit / rebase — ask the user if unsure).
-    - **Stop the timesheet entry** once posting (or the final summary for non-PR targets) is complete.
+
+15. **Stop the timesheet entry** once the CR work is complete — whether after posting (step 14), after a non-PR target's final summary (step 13), or if the user declined to proceed.
