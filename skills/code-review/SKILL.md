@@ -10,7 +10,12 @@ This skill executes a code review following NTIT conventions. The **conventions 
 When invoked, follow this procedure in order:
 
 1. **Identify the target.**
-   - A specific PR? A branch? Something else? If unclear, ask the user first.
+   - **Try to auto-detect first.** Match the current working directory's basename and `git branch --show-current` against these patterns:
+     - `cr-pr-<N>` → target is PR #N in the repo's `origin`.
+     - `cr-<slug>` → target is the branch `<slug>` (or `<slug>` as a short identifier).
+     - Further fallback: `gh pr view --json number,headRefName` from the current checkout may identify a PR whose head is the current branch.
+   - If a single clear candidate emerges, mention it inline (e.g. `Detected target: PR #27 — proceeding`) and move on without asking.
+   - If ambiguous or no match, ask the user: a specific PR? A branch? Something else?
    - If the target references a ClickUp ticket (e.g. `CU-XXXX` in the PR title, branch name, or description), pull the ticket via the ClickUp MCP — its scope informs the "does the diff do what the PR description claims" check.
 
 2. **Gather inputs and check for prior CR rounds.** Read everything relevant: all commits on the target, the PR description, all existing review and discussion comments (including author replies), and any prior findings files in `docs.local/` matching `cr-pr-<number>-*.md` (PR targets) or `cr-<slug>-*.md` (branches/other targets).
