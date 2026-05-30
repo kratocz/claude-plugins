@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "project-init",
+      "source": { "source": "github", "repo": "kratocz/project-init" },
+      "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
+      "version": "0.1.0",
+      "added": "2026-05-30"
+    },
+    {
       "name": "code-review",
       "source": { "source": "github", "repo": "kratocz/code-review" },
       "description": "Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting",
