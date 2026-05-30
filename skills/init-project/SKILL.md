@@ -37,12 +37,18 @@ If none match, treat it as **generic** (only the baseline entries below).
 
 ## 3. Build the `.gitignore`
 
-Always start from this baseline (macOS junk + JetBrains IDE):
+Always start from this baseline (macOS junk + JetBrains IDE + selective VS Code — ignore personal state but allow project-scope config to be shared with the team):
 
 ```
 .DS_Store
 ._*
 /.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 ```
 
 Then add type-specific entries:
