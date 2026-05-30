@@ -14,7 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
-| [code-review](https://github.com/kratocz/code-review) | 🟢 | 🟢 | 🟡 | Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting | 2026-05-30 |
+| [code-review](https://github.com/kratocz/code-review) | 🟢 | 🟢 | 🟢 | Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting | 2026-05-30 |
 | [tmux-hooks](https://github.com/kratocz/tmux-hooks) | 🟢 | 🟢 | 🔴 | Set tmux pane title to reflect Claude Code lifecycle state | 2026-05-16 |
 | [mikrotik-audit](https://github.com/kratocz/mikrotik-audit) | 🟢 | 🟢 | 🔴 | Read-only security audit for Mikrotik RouterOS devices via SSH | 2026-04-20 |
 | [session-log](https://github.com/kratocz/session-log) | 🟢 | 🟢 | 🔴 | Save a structured summary of each Claude Code session to a markdown file | 2026-04-19 |
