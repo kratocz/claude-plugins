@@ -9,7 +9,7 @@
       "name": "project-init",
       "source": { "source": "github", "repo": "kratocz/project-init" },
       "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "added": "2026-05-30"
     },
     {
