@@ -1,11 +1,11 @@
 ---
 name: code-review
-description: Run an NTIT-style code review on a PR (or another target). Picks a CR title, starts timesheet logging, produces findings labelled C1/M1/m1/n1 with line references and fix snippets in `docs.local/`, runs verification passes, then posts inline + summary comments on GitHub. Use whenever the user asks you to review a PR, says "udělej CR", asks for a code review on a branch or diff, or otherwise wants structured review feedback in the NTIT convention.
+description: Run a structured code review on a PR (or another target). Picks a CR title, starts timesheet logging, produces findings labelled C1/M1/m1/n1 with line references and fix snippets in `docs.local/code-reviews/`, runs verification passes, then posts inline + summary comments on GitHub. Use whenever the user asks you to review a PR, says "udělej CR", asks for a code review on a branch or diff, or otherwise wants structured review feedback.
 ---
 
-# NTIT code review workflow
+# Code review workflow
 
-This skill executes a code review following NTIT conventions. The **conventions themselves** (severity codes, focus areas, comment language, review process) live in the `## Code review` section of the plugin's `CLAUDE.md` — read that first; this skill is the **procedure** to follow.
+This skill executes a code review following the conventions in this plugin's `CLAUDE.md`. The **conventions themselves** (severity codes, focus areas, comment language, review process) live in the `## Code review` section — read that first; this skill is the **procedure** to follow.
 
 When invoked, follow this procedure in order:
 
@@ -16,7 +16,7 @@ When invoked, follow this procedure in order:
      - Further fallback: `gh pr view --json number,headRefName` from the current checkout may identify a PR whose head is the current branch.
    - If a single clear candidate emerges, mention it inline (e.g. `Detected target: PR #27 — proceeding`) and move on without asking.
    - If ambiguous or no match, ask the user: a specific PR? A branch? Something else?
-   - If the target references a ClickUp ticket (e.g. `CU-XXXX` in the PR title, branch name, or description), pull the ticket via the ClickUp MCP — its scope informs the "does the diff do what the PR description claims" check.
+   - If the project uses an issue tracker (ClickUp, Jira, Linear, GitHub Issues, …) and the target references a ticket (e.g. `CU-1234`, `JIRA-42`, `#123`), pull it for context via the appropriate MCP if available — its scope informs the "does the diff do what the PR description claims" check.
 
 2. **Gather inputs and check for prior CR rounds.** Read everything relevant: all commits on the target, the PR description, all existing review and discussion comments (including author replies), and any prior findings files in `docs.local/code-reviews/` matching `cr-pr-<number>-*.md` (PR targets) or `cr-<slug>-*.md` (branches/other targets).
    - No prior CR → proceed.
