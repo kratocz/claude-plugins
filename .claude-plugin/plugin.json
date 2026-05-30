@@ -1,0 +1,9 @@
+{
+  "name": "project-init",
+  "version": "0.1.0",
+  "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  }
+}
