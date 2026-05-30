@@ -26,6 +26,6 @@ Via the [kratocz marketplace](https://github.com/kratocz/claude-plugins):
 /plugin install code-review@kratocz
 ```
 
-## History
+## Acknowledgements
 
-Originally extracted from the `ntit-common` plugin in [`kratocz/ntit-claude-plugins`](https://github.com/kratocz/ntit-claude-plugins) and rewritten as a stand-alone plugin.
+Supported by [NTIT Group, s.r.o.](https://ntit.cz/).
