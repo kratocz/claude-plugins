@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "semver-release",
+      "source": { "source": "github", "repo": "kratocz/semver-release" },
+      "description": "Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release",
+      "version": "0.1.0",
+      "added": "2026-06-01"
+    },
+    {
       "name": "conventional-commit",
       "source": { "source": "github", "repo": "kratocz/conventional-commit" },
       "description": "Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs)",
