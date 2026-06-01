@@ -21,7 +21,7 @@ claude-plugins/
 
 The marketplace supports two source styles for plugins:
 
-1. **In-repo** (default for new plugins) — plugin lives at `plugins/<name>/`. The marketplace entry uses a bare string `"source": "<name>"`, resolved against `metadata.pluginRoot: "./plugins"`.
+1. **In-repo** (default for new plugins) — plugin lives at `plugins/<name>/`. The marketplace entry uses an explicit relative path `"source": "./plugins/<name>"`.
 2. **External GitHub repo** — for plugins that have an independent life (mature, broadly contributed). Entry uses `"source": { "source": "github", "repo": "kratocz/<name>" }`.
 
 Migration from per-repo to in-repo is in progress; both styles coexist in `marketplace.json`.
@@ -36,7 +36,7 @@ Migration from per-repo to in-repo is in progress; both styles coexist in `marke
    ```json
    {
      "name": "my-new-plugin",
-     "source": "my-new-plugin",
+     "source": "./plugins/my-new-plugin",
      "description": "Short description",
      "version": "1.0.0",
      "added": "YYYY-MM-DD"
