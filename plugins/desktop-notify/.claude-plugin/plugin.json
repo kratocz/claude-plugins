@@ -1,0 +1,13 @@
+{
+  "name": "desktop-notify",
+  "version": "1.1.0",
+  "description": "Desktop notifications when Claude Code waits for your approval or response",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  },
+  "homepage": "https://github.com/kratocz/desktop-notify",
+  "repository": "https://github.com/kratocz/desktop-notify",
+  "license": "MIT",
+  "keywords": ["notifications", "desktop", "hooks", "productivity", "linux", "macos"]
+}
