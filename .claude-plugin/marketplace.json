@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "conventional-commit",
+      "source": { "source": "github", "repo": "kratocz/conventional-commit" },
+      "description": "Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs)",
+      "version": "0.1.0",
+      "added": "2026-06-01"
+    },
+    {
       "name": "project-init",
       "source": { "source": "github", "repo": "kratocz/project-init" },
       "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
