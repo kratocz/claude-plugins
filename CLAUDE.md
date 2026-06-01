@@ -10,13 +10,43 @@
 claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json   ← marketplace catalog (name: "kratocz")
+├── plugins/                ← in-repo plugins (default for new plugins)
+│   └── <plugin-name>/
+│       ├── .claude-plugin/plugin.json
+│       ├── skills/<skill>/SKILL.md
+│       └── README.md
 ├── README.md
 └── CLAUDE.md
 ```
 
-## Adding a new plugin
+The marketplace supports two source styles for plugins:
 
-Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
+1. **In-repo** (default for new plugins) — plugin lives at `plugins/<name>/`. The marketplace entry uses a bare string `"source": "<name>"`, resolved against `metadata.pluginRoot: "./plugins"`.
+2. **External GitHub repo** — for plugins that have an independent life (mature, broadly contributed). Entry uses `"source": { "source": "github", "repo": "kratocz/<name>" }`.
+
+Migration from per-repo to in-repo is in progress; both styles coexist in `marketplace.json`.
+
+## Adding a new plugin (in-repo, preferred)
+
+1. Create `plugins/<plugin-name>/` with the standard structure:
+   - `.claude-plugin/plugin.json` (name, version, description, author)
+   - `skills/<skill-name>/SKILL.md`
+   - `README.md`
+2. Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
+   ```json
+   {
+     "name": "my-new-plugin",
+     "source": "my-new-plugin",
+     "description": "Short description",
+     "version": "1.0.0",
+     "added": "YYYY-MM-DD"
+   }
+   ```
+3. Prepend a row to README.md's **Available plugins** table (newest first).
+
+## Adding a new plugin (external repo)
+
+For plugins maintained in their own GitHub repo:
 
 ```json
 {
@@ -28,24 +58,31 @@ Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
 }
 ```
 
-Each plugin lives in its own GitHub repository. This marketplace repo is just a catalog.
+The plugin then lives in `github.com/kratocz/my-new-plugin` with the same internal structure as in-repo plugins.
 
-Also update `README.md`:
-1. Prepend a row to the **Available plugins** table (newest first — top of the table).
+## Migrating an external plugin to in-repo
+
+```
+git subtree add --prefix=plugins/<name> git@github.com:kratocz/<name>.git main
+```
+
+Then switch the entry's `source` from the `github` object to the bare `"<name>"` string. Archive the old standalone repo (don't delete — preserve install URLs and history) with a redirect note in its README.
 
 ## Updating plugin versions
 
-When the user says "Update versions." (or similar), refresh the `version` field for every plugin in `.claude-plugin/marketplace.json` to match the latest upstream release.
+When the user says "Update versions." (or similar):
+- **In-repo plugins:** read `version` from `plugins/<name>/.claude-plugin/plugin.json` and copy it to `marketplace.json`.
+- **External plugins:** fetch the latest tag:
+  ```
+  gh api repos/<repo>/tags --jq '.[0].name'
+  ```
+  If the repo has no tags, fall back to reading `.claude-plugin/plugin.json`:
+  ```
+  gh api repos/<repo>/contents/.claude-plugin/plugin.json --jq '.content' | base64 -d
+  ```
+  Strip the leading `v` from tags (e.g. `v1.4.0` → `1.4.0`).
 
-For each plugin, fetch the latest tag:
-```
-gh api repos/<repo>/tags --jq '.[0].name'
-```
-If the repo has no tags, fall back to reading `.claude-plugin/plugin.json`:
-```
-gh api repos/<repo>/contents/.claude-plugin/plugin.json --jq '.content' | base64 -d
-```
-Strip the leading `v` from tags (e.g. `v1.4.0` → `1.4.0`) and update `marketplace.json`. README has no version numbers — no update needed there.
+README has no version numbers — no update needed there.
 
 ## Marketplace name
 
