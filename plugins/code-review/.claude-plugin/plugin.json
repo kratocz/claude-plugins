@@ -1,0 +1,9 @@
+{
+  "name": "code-review",
+  "version": "0.1.0",
+  "description": "Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  }
+}
