@@ -4,9 +4,6 @@
     "name": "Petr Kratochvíl",
     "url": "https://krato.cz/"
   },
-  "metadata": {
-    "pluginRoot": "./plugins"
-  },
   "plugins": [
     {
       "name": "dockerize",
@@ -17,7 +14,7 @@
     },
     {
       "name": "launchpad-fix",
-      "source": "launchpad-fix",
+      "source": "./plugins/launchpad-fix",
       "description": "Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock",
       "version": "0.1.0",
       "added": "2026-06-01"
