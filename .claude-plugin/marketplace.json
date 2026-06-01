@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "launchpad-fix",
+      "source": { "source": "github", "repo": "kratocz/launchpad-fix" },
+      "description": "Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock",
+      "version": "0.1.0",
+      "added": "2026-06-01"
+    },
+    {
       "name": "semver-release",
       "source": { "source": "github", "repo": "kratocz/semver-release" },
       "description": "Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release",
