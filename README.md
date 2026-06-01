@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [dockerize](https://github.com/kratocz/dockerize) | 🟢 | 🟢 | 🟢 | Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services | 2026-06-01 |
 | [launchpad-fix](https://github.com/kratocz/launchpad-fix) | 🔴 | 🟢 | 🔴 | Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock | 2026-06-01 |
 | [semver-release](https://github.com/kratocz/semver-release) | 🟢 | 🟢 | 🟢 | Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release | 2026-06-01 |
 | [conventional-commit](https://github.com/kratocz/conventional-commit) | 🟢 | 🟢 | 🟢 | Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs) | 2026-06-01 |
@@ -31,6 +32,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install dockerize@kratocz
 /plugin install launchpad-fix@kratocz
 /plugin install semver-release@kratocz
 /plugin install conventional-commit@kratocz

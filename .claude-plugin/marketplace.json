@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "dockerize",
+      "source": { "source": "github", "repo": "kratocz/dockerize" },
+      "description": "Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services",
+      "version": "0.1.0",
+      "added": "2026-06-01"
+    },
+    {
       "name": "launchpad-fix",
       "source": { "source": "github", "repo": "kratocz/launchpad-fix" },
       "description": "Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock",
