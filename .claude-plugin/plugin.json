@@ -1,0 +1,9 @@
+{
+  "name": "dockerize",
+  "version": "0.1.0",
+  "description": "Add Docker to a project: multi-stage Dockerfile, .dockerignore, and an optional docker-compose.yml with detected services (Postgres, Redis, ...)",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  }
+}
