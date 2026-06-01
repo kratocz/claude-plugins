@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "dockerize",
-      "source": { "source": "github", "repo": "kratocz/dockerize" },
+      "source": "./plugins/dockerize",
       "description": "Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services",
       "version": "0.1.0",
       "added": "2026-06-01"
@@ -21,70 +21,70 @@
     },
     {
       "name": "semver-release",
-      "source": { "source": "github", "repo": "kratocz/semver-release" },
+      "source": "./plugins/semver-release",
       "description": "Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release",
       "version": "0.1.0",
       "added": "2026-06-01"
     },
     {
       "name": "conventional-commit",
-      "source": { "source": "github", "repo": "kratocz/conventional-commit" },
+      "source": "./plugins/conventional-commit",
       "description": "Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs)",
       "version": "0.1.0",
       "added": "2026-06-01"
     },
     {
       "name": "project-init",
-      "source": { "source": "github", "repo": "kratocz/project-init" },
+      "source": "./plugins/project-init",
       "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
       "version": "0.1.1",
       "added": "2026-05-30"
     },
     {
       "name": "code-review",
-      "source": { "source": "github", "repo": "kratocz/code-review" },
+      "source": "./plugins/code-review",
       "description": "Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting",
       "version": "0.1.0",
       "added": "2026-05-30"
     },
     {
       "name": "tmux-hooks",
-      "source": { "source": "github", "repo": "kratocz/tmux-hooks" },
+      "source": "./plugins/tmux-hooks",
       "description": "Set tmux pane title to reflect Claude Code lifecycle state",
       "version": "1.0.0",
       "added": "2026-05-16"
     },
     {
       "name": "mikrotik-audit",
-      "source": { "source": "github", "repo": "kratocz/mikrotik-audit" },
+      "source": "./plugins/mikrotik-audit",
       "description": "Read-only security audit for Mikrotik RouterOS devices via SSH",
       "version": "0.1.0",
       "added": "2026-04-20"
     },
     {
       "name": "session-log",
-      "source": { "source": "github", "repo": "kratocz/session-log" },
+      "source": "./plugins/session-log",
       "description": "Save a structured summary of each Claude Code session to a markdown file",
       "version": "1.0.0",
       "added": "2026-04-19"
     },
     {
       "name": "session-tracker",
-      "source": { "source": "github", "repo": "kratocz/session-tracker" },
+      "source": "./plugins/session-tracker",
       "description": "Start and stop time tracking sessions in Toggl Track or Clockify",
       "version": "1.4.0",
       "added": "2026-04-09"
     },
     {
       "name": "desktop-notify",
-      "source": { "source": "github", "repo": "kratocz/desktop-notify" },
+      "source": "./plugins/desktop-notify",
       "description": "Desktop notifications when Claude Code waits for your response or approval",
       "version": "1.1.0",
       "added": "2026-03-23"
     },
     {
       "name": "second-opinion",
-      "source": { "source": "github", "repo": "kratocz/second-opinion" },
+      "source": "./plugins/second-opinion",
       "description": "Get a second opinion from Gemini or GPT on any important topic or decision",
       "version": "1.0.0",
       "added": "2026-04-04"
