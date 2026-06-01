@@ -1,0 +1,11 @@
+{
+  "name": "mikrotik-audit",
+  "version": "0.1.0",
+  "description": "Read-only security audit for Mikrotik RouterOS devices via SSH.",
+  "author": {
+    "name": "Petr Kratochvíl",
+    "url": "https://krato.cz/"
+  },
+  "license": "MIT",
+  "keywords": ["mikrotik", "routeros", "security", "audit", "ssh", "network"]
+}
