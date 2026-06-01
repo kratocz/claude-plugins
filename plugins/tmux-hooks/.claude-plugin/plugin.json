@@ -1,0 +1,8 @@
+{
+  "name": "tmux-hooks",
+  "description": "Tmux pane title synchronization for Claude Code lifecycle events",
+  "version": "1.0.0",
+  "author": {
+    "name": "krato"
+  }
+}
