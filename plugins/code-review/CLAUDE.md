@@ -2,6 +2,12 @@
 
 This file is loaded into memory whenever the `code-review` plugin is enabled. It captures the **conventions** for code review; the step-by-step **procedure** for performing one lives in the `/code-review:code-review` skill.
 
+## Communication
+
+- Conversation language with the user: **match the user's language** (Czech with full diacritics, English, or whatever the user writes in)
+- Language of code, commit messages, PR titles and code review: **English**
+- Code comments: English, unless the specific project says otherwise
+
 ## Code review
 
 Applies to `/review`, `/ultrareview`, and manual PR comments. **If a project's own conventions (`AGENTS.md`/`CLAUDE.md`) conflict with the rules below, follow the project's rules.**
@@ -44,3 +50,14 @@ The step-by-step procedure for *performing* a code review (CR title, timesheet, 
 - Passwords, API keys, OAuth tokens and `.env` files: **never** commit them or send them to external services (pastebin, gist, AI tools outside of Claude Code).
 - Before committing, quickly check the diff for unintended secrets (typically `.env`, `credentials.json`, `*.pem`, hardcoded tokens in tests).
 - If you find a secret in an existing commit, **don't just delete it from the working tree** — warn the user, the secret needs to be revoked and the history rewritten.
+
+## .gitignore
+
+In any new repo, consider adding lines for common macOS junk (many teammates work on macOS):
+
+```
+.DS_Store
+._*
+```
+
+A global `~/.config/git/ignore` handles this for each developer individually, but a project-level `.gitignore` protects the team and external contributors.
