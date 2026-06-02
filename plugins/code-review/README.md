@@ -25,7 +25,3 @@ Via the [kratocz marketplace](https://github.com/kratocz/claude-plugins):
 /plugin marketplace add kratocz/claude-plugins
 /plugin install code-review@kratocz
 ```
-
-## Acknowledgements
-
-Supported by [NTIT Group, s.r.o.](https://ntit.cz/).
