@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [work](./plugins/work) | 🟢 | 🟢 | 🟢 | Morning briefing across task trackers and code review queues — pulls Todoist/ClickUp/GitHub/Calendar into a single scored todo list | 2026-06-03 |
 | [dockerize](./plugins/dockerize) | 🟢 | 🟢 | 🟢 | Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services | 2026-06-01 |
 | [launchpad-fix](./plugins/launchpad-fix) | 🔴 | 🟢 | 🔴 | Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock | 2026-06-01 |
 | [semver-release](./plugins/semver-release) | 🟢 | 🟢 | 🟢 | Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release | 2026-06-01 |
@@ -32,6 +33,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install work@kratocz
 /plugin install dockerize@kratocz
 /plugin install launchpad-fix@kratocz
 /plugin install semver-release@kratocz

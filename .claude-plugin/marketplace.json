@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "work",
+      "source": "./plugins/work",
+      "description": "Morning briefing across task trackers and code review queues — pulls Todoist/ClickUp/GitHub/Calendar into a single scored todo list",
+      "version": "0.1.0",
+      "added": "2026-06-03"
+    },
+    {
       "name": "dockerize",
       "source": "./plugins/dockerize",
       "description": "Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services",
