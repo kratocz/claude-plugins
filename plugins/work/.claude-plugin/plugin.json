@@ -1,0 +1,6 @@
+{
+  "name": "work",
+  "version": "0.1.0",
+  "description": "Morning briefing across task trackers and code review queues — pulls Todoist/ClickUp/GitHub/Calendar into a single scored todo list",
+  "author": { "name": "Petr Kratochvíl", "url": "https://krato.cz/" }
+}
