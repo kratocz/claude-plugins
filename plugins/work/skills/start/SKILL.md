@@ -199,13 +199,15 @@ Morning briefing across all configured task and code review sources.
 
    Assign each item to exactly one bucket based on its data (NOT its score):
 
-   - **🔥 OVERDUE** — `due` is set and `due < today`
-   - **👀 WAITING ON REVIEW** — `type == "pr_review"` (regardless of due)
-   - **📅 TODAY** — `due == today` OR (`due == null` AND `priority in [p1, p2]`)
-   - **📆 UPCOMING** — `due` is in the next 7 days (tomorrow through +7)
+   - **🔥 `OVERDUE`** — `due` is set and `due < today`
+   - **👀 `WAITING_ON_REVIEW`** — `type == "pr_review"` (regardless of due)
+   - **📅 `TODAY`** — `due == today` OR (`due == null` AND `priority in [p1, p2]`)
+   - **📆 `UPCOMING`** — `due` is in the next 7 days (tomorrow through +7)
    - **(uncategorized)** — anything else: low-priority items with no due date, calendar events more than 12h out, etc. Default: drop from briefing.
 
-   Bucket assignment priority (if an item matches multiple, pick the first match in this order): OVERDUE > WAITING ON REVIEW > TODAY > UPCOMING.
+   (The bucket enum values above — `OVERDUE`, `WAITING_ON_REVIEW`, `TODAY`, `UPCOMING` — are the canonical strings used in the snapshot JSON. The display labels in the rendered briefing in step 7 use friendlier names like "Čeká na tvůj review".)
+
+   Bucket assignment priority (if an item matches multiple, pick the first match in this order): `OVERDUE` > `WAITING_ON_REVIEW` > `TODAY` > `UPCOMING`.
 
    **Top N filter:** keep only the top `effective_config.scoring.top_n` items across all buckets. The score determines which items survive the filter; the bucket determines where they're displayed. Within a bucket, sort by score descending (tie-break rules from step 5).
 

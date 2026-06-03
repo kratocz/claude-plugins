@@ -16,6 +16,7 @@ End-of-day retrospective: what closed, what carries over, what arrived during th
    Read `~/.claude/plugins/work/last-briefing.json` with the Read tool.
 
    - If missing: stop with "Žádný snapshot. Bez ranního /work-start nelze udělat end-of-day souhrn." Return.
+   - If `schema_version` is not `1`: warn "Snapshot je z jiné verze pluginu. Pokračuju best-effort." Continue.
    - Compute age:
      ```bash
      date -u +%s
@@ -54,7 +55,7 @@ End-of-day retrospective: what closed, what carries over, what arrived during th
    - **`carry_over`** = snapshot items whose `id` is in `current_open` (still open at end of day)
    - **`new_unhandled`** = items in `current_open` whose `id` is NOT in snapshot AND NOT in `completed_today`
 
-   Sort each list by score descending (re-score `carry_over` and `new_unhandled` using current data via /work-start scoring; for `completed_today` use the score they had in the snapshot if available, else 0).
+   Sort each list by score descending (re-score `carry_over` and `new_unhandled` using current data via `/work-start` step 5 scoring; for `completed_today` use the score they had in the snapshot if available, else 0).
 
 5. **Render summary** in the configured language (Czech default):
 

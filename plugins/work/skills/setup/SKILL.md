@@ -2,7 +2,7 @@
 name: work-setup
 description: Configure the work plugin — detect available MCP sources (Todoist, GitHub, ClickUp, Google Calendar) and write ~/.claude/plugins/work/config.json. Use when the user says "/work-setup", "configure work", or when /work-start fails because config is missing.
 version: 0.1.0
-allowed-tools: Read, Write, Bash, ToolSearch, AskUserQuestion
+allowed-tools: Read, Write, Bash, ToolSearch, AskUserQuestion, mcp__plugin_ntit-common_clickup__clickup_get_workspace_members
 ---
 
 # Work Setup
@@ -39,7 +39,7 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
 3. **Per-source Q&A** — for each source in `detected_sources`:
 
-   Use AskUserQuestion to ask "Zapnout zdroj `<source_name>` ve work brieffingu?" (or English equivalent based on language setting). Options:
+   Use AskUserQuestion to ask "Zapnout zdroj `<source_name>` ve work briefingu?" (or English equivalent based on language setting). Options:
    - "Ano (Recommended)" / "Yes (Recommended)" — `enabled: true`
    - "Ne" / "No" — `enabled: false`
 
@@ -56,10 +56,11 @@ Configure the work plugin: detect which MCP sources are available in this sessio
    - clickup: `{ "include": ["assigned_to_me"], "scope": "today_and_overdue" }`
    - google_calendar: `{ "window_hours": 12 }`
 
-   Store the result for each source as an object like:
-   ```json
-   { "enabled": true, "mcp_prefix": "<from detection>", "username": "...", "filters": { ... } }
-   ```
+   Store the result for each source as an object. The exact shape varies per source (matching the spec / CLAUDE.md config example):
+   - `todoist`: `{ "enabled": bool, "mcp_prefix": "...", "filters": { "priorities": [...], "scope": "..." } }`
+   - `github`: `{ "enabled": bool, "mcp_prefix": "...", "username": "...", "include": [...] }` — note `include` at source level, NOT inside `filters`
+   - `clickup`: `{ "enabled": bool, "mcp_prefix": "...", "member_id": "...", "filters": { "include": [...], "scope": "..." } }`
+   - `google_calendar`: `{ "enabled": bool, "mcp_prefix": "...", "window_hours": 12 }` — note `window_hours` at source level, NOT inside `filters`
 
    (mcp_prefix is the prefix used during detection in step 2 — e.g. `mcp__claude_ai_Todoist__`.)
 
@@ -94,10 +95,10 @@ Configure the work plugin: detect which MCP sources are available in this sessio
    {
      "language": "<from step 5>",
      "sources": {
-       "todoist":         { "enabled": <bool>, "mcp_prefix": "mcp__claude_ai_Todoist__", "filters": { ... } },
-       "github":          { "enabled": <bool>, "mcp_prefix": "mcp__github__", "username": "...", "filters": { ... } },
-       "clickup":         { "enabled": <bool>, "mcp_prefix": "mcp__plugin_ntit-common_clickup__", "member_id": "...", "filters": { ... } },
-       "google_calendar": { "enabled": <bool>, "mcp_prefix": "mcp__claude_ai_Google_Calendar__", "filters": { ... } }
+       "todoist":         { "enabled": <bool>, "mcp_prefix": "mcp__claude_ai_Todoist__", "filters": { "priorities": ["p1", "p2"], "scope": "today_and_overdue" } },
+       "github":          { "enabled": <bool>, "mcp_prefix": "mcp__github__", "username": "...", "include": ["assigned_issues", "review_requested_prs", "my_open_prs"] },
+       "clickup":         { "enabled": <bool>, "mcp_prefix": "mcp__plugin_ntit-common_clickup__", "member_id": "...", "filters": { "include": ["assigned_to_me"], "scope": "today_and_overdue" } },
+       "google_calendar": { "enabled": <bool>, "mcp_prefix": "mcp__claude_ai_Google_Calendar__", "window_hours": 12 }
      },
      "scoring": {
        "weights": { "priority": 40, "due_proximity": 30, "age": 15, "type_assignment": 15 },
