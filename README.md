@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [claude-statusline-state](./plugins/claude-statusline-state) | 🟢 | 🟢 | 🔴 | Publish per-session Claude Code lifecycle state (idle/working/waiting) to a file, ready to render as an extra line in your statusline | 2026-06-09 |
 | [work](./plugins/work) | 🟢 | 🟢 | 🟢 | Morning briefing across task trackers and code review queues — pulls Todoist/ClickUp/GitHub/Calendar into a single scored todo list | 2026-06-03 |
 | [dockerize](./plugins/dockerize) | 🟢 | 🟢 | 🟢 | Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services | 2026-06-01 |
 | [launchpad-fix](./plugins/launchpad-fix) | 🔴 | 🟢 | 🔴 | Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock | 2026-06-01 |
@@ -33,6 +34,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install claude-statusline-state@kratocz
 /plugin install work@kratocz
 /plugin install dockerize@kratocz
 /plugin install launchpad-fix@kratocz

@@ -1,0 +1,8 @@
+{
+  "name": "claude-statusline-state",
+  "description": "Publishes per-session Claude Code lifecycle state to a file, ready to be rendered as an extra line in your statusline",
+  "version": "1.0.0",
+  "author": {
+    "name": "krato"
+  }
+}
