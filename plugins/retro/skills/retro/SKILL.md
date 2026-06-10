@@ -1,8 +1,8 @@
 ---
 name: retro
-description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries. Use when the user says "/retro", "retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
+description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries. Use when the user says "/retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
 version: 0.1.0
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, AskUserQuestion, Skill, ToolSearch
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, Task, AskUserQuestion, Skill
 ---
 
 # Retro
@@ -59,11 +59,12 @@ content), and a one-line rationale. Skip empty areas silently.
 For each memory file (excluding `MEMORY.md`): propose migration when **all**
 of these hold:
 
-- `metadata.type` is `project` or `feedback` (never `user`),
+- `metadata.type` is `project` or `feedback` (never `user`); if the field is
+  missing, judge from content and ask when unsure whether it is personal,
 - the fact is about this project and useful to anyone (human or agent)
   working in the repo — not just to you in this session,
 - it contains nothing personal or machine-local,
-- equivalent content is not already in the target file.
+- equivalent content is not already in the target file (check with Grep).
 
 The proposed change is: add the fact to the appropriate section of the target
 file (create the section if needed), then delete the memory file and its
@@ -119,14 +120,15 @@ The user had to correct or block the same unwanted action more than once this
 session → propose a hook that prevents it. On apply: if the hookify plugin is
 installed (its skills appear in your available-skills list), invoke
 `hookify:hookify` with a description of the rule; otherwise propose the
-`hooks` entry for `.claude/settings.json` yourself and apply it with Edit.
+`hooks` entry for `.claude/settings.json` yourself and apply it with Edit
+(create the file with Write if it does not exist).
 
 ### G. Permission allowlist
 
 Commands or tools the user approved repeatedly this session → propose
 `permissions.allow` entries for the project's `.claude/settings.json` (or
 `.claude/settings.local.json` if the user prefers not to commit them — ask
-when applying). Mention that `/fewer-permission-prompts` does a
+when applying). Mention that `/fewer-permission-prompts` (if available) does a
 transcript-wide scan if the user wants more than this session's view.
 
 ## Phase 2 — Interactive apply
@@ -141,7 +143,8 @@ Present candidate items grouped by area, then approve and apply:
 3. Apply each approved item immediately, in list order:
    - Writes to the target knowledge file go first; a memory file is deleted
      **only after** the corresponding write succeeded, and its index line is
-     removed from `MEMORY.md` in the same step.
+     removed from `MEMORY.md` in the same step. Delete memory files with
+     Bash `rm` on the exact path read in Phase 0 — never glob-delete.
    - Doc fixes (area C) are applied with Edit, one finding at a time.
    - New project skills are scaffolded as `.claude/skills/<name>/SKILL.md`
      with proper frontmatter (`name`, `description` with trigger phrases) and
