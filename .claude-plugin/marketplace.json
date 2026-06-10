@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "retro",
+      "source": "./plugins/retro",
+      "description": "Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates",
+      "version": "0.1.0",
+      "added": "2026-06-10"
+    },
+    {
       "name": "claude-statusline-state",
       "source": "./plugins/claude-statusline-state",
       "description": "Publish per-session Claude Code lifecycle state (idle/working/waiting) to a file, ready to render as an extra line in your statusline",
