@@ -93,7 +93,7 @@
       "name": "session-tracker",
       "source": "./plugins/session-tracker",
       "description": "Start and stop time tracking sessions in Toggl Track or Clockify",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "added": "2026-04-09"
     },
     {

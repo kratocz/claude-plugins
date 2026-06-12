@@ -2,7 +2,7 @@
 name: start
 description: Start a time tracking session or timer. Use when the user says "/start", "start session", "start timer", "begin tracking", "I'm starting work on...", or any similar phrase indicating they want to begin tracking time.
 argument-hint: [task-description-or-url]
-version: 1.4.0
+version: 1.4.1
 allowed-tools: Read, Bash, WebFetch
 ---
 
@@ -29,8 +29,9 @@ Start a new time tracking session in the configured backend.
    ### Toggl Track
    ```bash
    curl -s -u "<config.toggl.api_key>:api_token" \
-     https://api.track.toggl.com/api/v9/time_entries/current
+     https://api.track.toggl.com/api/v9/me/time_entries/current
    ```
+   (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running".)
 
    ### Clockify
    ```bash

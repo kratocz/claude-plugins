@@ -1,7 +1,7 @@
 ---
 name: stop
 description: Stop the current time tracking session or timer. Takes no arguments — always stops the currently running entry. Use when the user says "/stop", "stop session", "stop timer", "end session", "I'm done", "finished working", or any similar phrase indicating they want to stop tracking time.
-version: 1.4.0
+version: 1.4.1
 allowed-tools: Read, Bash
 ---
 
@@ -20,9 +20,9 @@ Stop the currently running time tracking session and report its duration.
    ### Toggl Track
    ```bash
    curl -s -u "<config.toggl.api_key>:api_token" \
-     https://api.track.toggl.com/api/v9/time_entries/current
+     https://api.track.toggl.com/api/v9/me/time_entries/current
    ```
-   If the response body is `null`, tell the user (in the configured language) that no session is currently running. Then stop.
+   If the response body is `null`, tell the user (in the configured language) that no session is currently running. Then stop. (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running".)
 
    ### Clockify
    ```bash
@@ -37,7 +37,7 @@ Stop the currently running time tracking session and report its duration.
    ```bash
    curl -s -u "<config.toggl.api_key>:api_token" \
      -H "Content-Type: application/json" \
-     -X PATCH "https://api.track.toggl.com/api/v9/time_entries/<workspace_id>/<timer_id>/stop"
+     -X PATCH "https://api.track.toggl.com/api/v9/workspaces/<workspace_id>/time_entries/<timer_id>/stop"
    ```
 
    ### Clockify
