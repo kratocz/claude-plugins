@@ -84,6 +84,26 @@ When the user says "Update versions." (or similar):
 
 README has no version numbers — no update needed there.
 
+## Releasing an in-repo plugin
+
+Commit messages are the single source of truth for release content (same principle as the former standalone-repo workflow).
+
+1. Apply the changes and bump the version in **three places**, kept in sync: `plugins/<name>/.claude-plugin/plugin.json`, every skill's frontmatter (`version:` line), and the plugin's entry in `marketplace.json`.
+2. Commit with a scoped conventional subject — e.g. `fix(<name>): <summary> (vX.Y.Z)` — and a bulleted body describing user-visible changes; push `main`.
+3. Create a **per-plugin lightweight tag** and push it:
+   ```bash
+   git tag <name>-vX.Y.Z && git push origin <name>-vX.Y.Z
+   ```
+4. Create the GitHub Release with **explicit notes**:
+   ```bash
+   gh release create <name>-vX.Y.Z --title "<name> vX.Y.Z — <short summary>" --notes "<bulleted user-visible changes>"
+   ```
+   Do **not** use `--generate-notes` here — in the monorepo it would pull in commits of *other* plugins since the previous tag.
+
+SemVer: patch for fixes/hardening/metadata, minor for new config fields or behavior, major for breaking changes (config schema changes that break existing configs).
+
+First release under this convention: `session-tracker-v1.4.1` (2026-06-12).
+
 ## Marketplace name
 
 The marketplace `name` field is `kratocz` — this is the suffix used in install commands:
