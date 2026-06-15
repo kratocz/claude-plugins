@@ -57,9 +57,9 @@ top row in the README **Available plugins** table.
 | B | Session → AGENTS.md | non-obvious learnings from the current conversation worth persisting for all agents |
 | C | Project `*.md` audit | subagent (Explore) returns outdated claims as a compact list: file, line, claim, why outdated, suggested fix — never full file contents |
 | D | Stale memory cleanup | memories contradicted by current repo state or by the session |
-| E | Skills | repeated multi-prompt workflow → propose new skill; a skill that misfired during the session → propose a SKILL.md edit |
+| E | Skills | repeated multi-prompt workflow → propose new skill; a skill that misfired during the session → propose a SKILL.md edit. For a marketplace skill, first locate its **source repo** (not the `~/.claude/plugins/cache/...` copy) and verify cache matches source before proposing an edit |
 | F | Hooks | repeatedly corrected unwanted action → propose a hookify rule (delegate to `hookify:hookify` if installed, else write a plain hook) |
-| G | Permission allowlist | commands repeatedly approved in this session → propose `.claude/settings.json` allowlist entries; mention `/fewer-permission-prompts` for a transcript-wide scan |
+| G | Permission allowlist | commands repeatedly approved in this session → propose `.claude/settings.json` allowlist entries; mention `/fewer-permission-prompts` for a transcript-wide scan. Add entries **one at a time without touching existing lines** — editing the whole `permissions.allow` block trips the auto-mode self-modification classifier (observed 2026-06-15) |
 
 ### Phase 2 — interactive apply
 
