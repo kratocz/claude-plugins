@@ -22,6 +22,7 @@ When invoked, follow this procedure in order:
    - No prior CR → proceed.
    - Prior CR exists → review only the new changes since (new commits, new discussion). **Read author replies to prior findings carefully** — don't re-flag what's been justified or resolved.
    - Prior CR exists and there are no new changes → tell the user and skip the CR; the author hasn't addressed earlier findings yet.
+   - **Compute the diff against the right base — don't trust the local checkout.** In a CR worktree the local `HEAD`/`main` ref is often *not* on the PR commit and *not* on current `origin/main` (the session-start `gitStatus` is a stale snapshot, and repos with an auto-pin CI bot move `origin/main` independently). A raw `git diff <local-main>...<head>` can then show dozens of unrelated files. Always: `git fetch origin` (and `git fetch origin pull/<N>/head:pr-<N>` for a PR), then review against the **true merge-base** — `git merge-base origin/main pr-<N>` — or just trust GitHub's own calculation via `gh pr diff <N>` and cross-check the file count against the PR's `changedFiles`. If the local diffstat and `gh pr diff --name-only` disagree on the file list, the local base is wrong, not the PR.
 
 3. **Pick a CR title and start timesheet logging.**
    - Decide a short, descriptive title for this CR.
