@@ -1,7 +1,7 @@
 ---
 name: retro
 description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries, and learns from blocked or guardrail-gated actions. Use when the user says "/retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
-version: 0.1.0
+version: 0.2.0
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, Task, AskUserQuestion, Skill
 ---
 
@@ -63,12 +63,20 @@ of these hold:
   missing, judge from content and ask when unsure whether it is personal,
 - the fact is about this project and useful to anyone (human or agent)
   working in the repo — not just to you in this session,
-- it contains nothing personal or machine-local,
 - equivalent content is not already in the target file (check with Grep).
 
 The proposed change is: add the fact to the appropriate section of the target
 file (create the section if needed), then delete the memory file and its
 `MEMORY.md` index line.
+
+**Partial migration when a memory mixes shareable and machine-local content.**
+A memory does not have to be all-or-nothing. When a memory's *core fact* is a
+durable, shareable project truth (e.g. "test envs are namespaces on the prod
+cluster") but the same file also carries personal or machine-local detail
+(kubeconfig paths, tunnels, IPs, tokens, private hostnames), migrate **only
+the shareable core** into the target file and **keep the memory** for the
+local detail — do not delete it. Only delete the memory when everything in it
+moved to the target file. Never copy the machine-local parts into the repo.
 
 ### B. Session → AGENTS.md
 
@@ -92,6 +100,14 @@ context window. Instruct it to:
 
 In large projects it should prioritize `README.md`, the target knowledge
 file, and `docs/`.
+
+When presenting area-C findings in Phase 2, **separate those caused by this
+session's work from incidental staleness the audit happened to surface**. The
+session-related fixes are the retro's actual output; the incidental ones are
+general housekeeping the user may want to defer or skip. Group them under
+distinct headings (or distinct AskUserQuestion questions) and label the
+incidental set as "unrelated to this session" so the user can tell learning
+from cleanup.
 
 ### D. Stale memory cleanup
 
@@ -200,7 +216,11 @@ Report per area: applied / skipped / failed (one line each). Then:
 
 - If repo files changed (target knowledge file, docs, project skills,
   settings): list them and offer — do not run — a commit, suggesting a
-  message like `docs: apply retro session learnings`.
+  message like `docs: apply retro session learnings`. **If the working tree
+  also holds unrelated in-progress work, commit only the retro-touched files
+  by path (`git commit -- <paths>`), never `git add -A` / `git add .`** —
+  the retro's changes must not sweep up the user's other work. Mention when
+  you do this so the user knows their other changes were left untouched.
 - Memory directory changes (deleted/updated memories) are outside the repo;
   list them separately so the user knows what moved.
 
