@@ -1,6 +1,6 @@
 ---
 name: retro
-description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries. Use when the user says "/retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
+description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries, and learns from blocked or guardrail-gated actions. Use when the user says "/retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
 version: 0.1.0
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, Task, AskUserQuestion, Skill
 ---
@@ -50,7 +50,7 @@ Hard rules, valid for the whole skill:
 
 ## Phase 1 — Analysis (read-only)
 
-Work through areas A–G. Collect candidate items into one numbered list; each
+Work through areas A–H. Collect candidate items into one numbered list; each
 item records: area, one-line title, the exact proposed change (target file +
 content), and a one-line rationale. Skip empty areas silently.
 
@@ -140,6 +140,38 @@ allow-list lines** (append after the last entry). Editing the whole
 `permissions.allow` block — even to only add lines — trips the auto-mode
 self-modification classifier, which reads the existing lines in the edit as
 newly-widened permissions and blocks it.
+
+**Do NOT propose allowlist entries for actions where the approval friction is
+the safety mechanism, even if the user approved them repeatedly.** Exclude:
+writes or deletes against production or shared infrastructure (e.g. `kubectl`
+against a prod cluster, `exec` into running pods), anything that handles
+secrets or tokens, and destructive or hard-to-reverse commands. For these,
+repeated prompting is working as intended — allowlisting them silently removes
+a guardrail the user, or the harness classifier, was relying on. When unsure
+whether an action qualifies, leave it out and say why. Allowlist freely only
+for genuinely read-only, idempotent, low-blast-radius calls (status reads,
+searches, lookups).
+
+### H. Guardrail hits — learning from blocked actions
+
+Review the session for actions that were **blocked or required explicit user
+authorization**: permission-classifier denials, hook blocks, or points where
+you stopped to ask before a sensitive operation. These boundaries are often
+the session's most valuable learning — they encode where the safe edge of the
+work actually is.
+
+For each recurring or notable guardrail hit, consider proposing ONE of:
+
+- a **memory** (type `feedback` or `project`) recording the boundary and how
+  to work within it next time (e.g. "secrets go via stdin, not argv, or the
+  classifier blocks" — a pattern worth not re-discovering),
+- a refinement to the target knowledge file when the boundary is a durable,
+  shareable project fact (e.g. "test envs live on the prod cluster — expect
+  prod-level gating"),
+- nothing, when it was a genuine one-off.
+
+Do not propose weakening the guardrail itself — that is Area G's exclusion,
+not a goal here. The aim is to *remember* the boundary, not remove it.
 
 ## Phase 2 — Interactive apply
 
