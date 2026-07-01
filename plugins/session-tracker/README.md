@@ -20,6 +20,7 @@ Run once to configure your time tracking backend:
 
 ```
 /start Refactoring auth module
+/log-entry 9:00-11:30 Code review PR #42
 /stop
 ```
 
