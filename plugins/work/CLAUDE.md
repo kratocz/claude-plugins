@@ -14,7 +14,8 @@ work/
 │   ├── setup/SKILL.md     ← /work-setup
 │   ├── start/SKILL.md     ← /work-start
 │   ├── status/SKILL.md    ← /work-status
-│   └── end/SKILL.md       ← /work-end
+│   ├── end/SKILL.md       ← /work-end
+│   └── standup/SKILL.md   ← /work-standup
 ├── README.md
 └── CLAUDE.md
 ```
@@ -30,8 +31,10 @@ Global config at `~/.claude/plugins/work/config.json`:
     "todoist": { "enabled": true, "mcp_prefix": "mcp__claude_ai_Todoist__", "filters": { "priorities": ["p1", "p2"], "scope": "today_and_overdue" } },
     "github":  { "enabled": true, "mcp_prefix": "mcp__github__", "username": "kratocz", "include": ["assigned_issues", "review_requested_prs", "my_open_prs"] },
     "clickup": { "enabled": false, "mcp_prefix": "mcp__plugin_ntit-common_clickup__" },
-    "google_calendar": { "enabled": true, "mcp_prefix": "mcp__claude_ai_Google_Calendar__", "window_hours": 12 }
+    "google_calendar": { "enabled": true, "mcp_prefix": "mcp__claude_ai_Google_Calendar__", "window_hours": 12 },
+    "toggl":   { "enabled": true, "mcp_prefix": "mcp__toggl__", "project_id": null, "project_name": null, "billable_only": false }
   },
+  "standup": { "default_window": "last_workday_noon" },
   "scoring": {
     "weights": { "priority": 40, "due_proximity": 30, "age": 15, "type_assignment": 15 },
     "top_n": 8
@@ -40,6 +43,14 @@ Global config at `~/.claude/plugins/work/config.json`:
 ```
 
 Persists across plugin upgrades (lives outside `~/.claude/plugins/cache/`).
+
+The `toggl` source and the top-level `standup` block are consumed **only by
+`/work-standup`** (the daily briefing skills ignore them). `toggl.project_id`
+/ `toggl.project_name` scope the recap to one project — leave both null to
+recap all tracked time. `standup.default_window` sets the default recap start
+(`last_workday_noon` | `24h`/`48h`/`72h` | a bare `YYYY-MM-DD`); override
+per-run with `--since`. Toggl reads prefer the Toggl MCP server and fall back
+to `session-tracker`'s API key when the MCP server is absent.
 
 ## Per-project override
 
@@ -53,6 +64,7 @@ Persists across plugin upgrades (lives outside `~/.claude/plugins/cache/`).
 | `/work-start`  | Morning | Fetches all enabled sources, scores items, prints top N briefing |
 | `/work-status` | Mid-day | Diffs current state against last briefing snapshot |
 | `/work-end`    | Evening | Summarises what got done and what carries over |
+| `/work-standup`| Standup | Recap since last standup from Toggl + git + GitHub reviews/merges; paste-ready |
 
 ## Scoring formula
 

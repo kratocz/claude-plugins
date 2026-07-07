@@ -1,7 +1,7 @@
 ---
 name: work-setup
 description: Configure the work plugin — detect available MCP sources (Todoist, GitHub, ClickUp, Google Calendar) and write ~/.claude/plugins/work/config.json. Use when the user says "/work-setup", "configure work", or when /work-start fails because config is missing.
-version: 0.1.0
+version: 0.2.0
 allowed-tools: Read, Write, Bash, ToolSearch, AskUserQuestion, mcp__plugin_ntit-common_clickup__clickup_get_workspace_members
 ---
 
