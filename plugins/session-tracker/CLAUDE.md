@@ -11,6 +11,8 @@ session-tracker/
 ├── .claude-plugin/
 │   └── plugin.json        ← plugin manifest
 ├── skills/
+│   ├── log-entry/
+│   │   └── SKILL.md       ← /log-entry skill
 │   ├── setup-tracker/
 │   │   └── SKILL.md       ← /setup-tracker skill
 │   ├── start/
@@ -47,6 +49,7 @@ Top-level fields apply regardless of backend. Defaults when missing: `billable` 
 | `/setup-tracker` | First run / reconfigure | Interactive setup, writes config |
 | `/start [desc]` | Begin tracking | Starts timer via API |
 | `/stop` | End tracking | Stops running timer, reports duration |
+| `/log-entry [window] [desc]` | Record past work | Creates a completed (retroactive) time entry — no live timer |
 
 ## Adding a new backend
 
@@ -56,16 +59,28 @@ Top-level fields apply regardless of backend. Defaults when missing: `billable` 
 
 ## Release workflow
 
-Commit messages are the single source of truth for release content. Tags are lightweight pointers; GitHub Release notes are auto-generated from commits since the previous tag.
+This plugin lives **in-repo** in the `claude-plugins` monorepo, so it follows the
+monorepo release convention documented in the root `CLAUDE.md`
+("Releasing an in-repo plugin") — **not** a per-repo one. Key points specific to
+this plugin:
 
-1. Bump `version` in `plugin.json` **and** in every skill's frontmatter (keep them in sync).
-2. Commit the bump. Use a clear `feat:` / `fix:` / `chore:` subject and a bulleted body describing user-visible changes — this body is what ends up surfaced in the release notes and in `git log`.
-3. Create a lightweight tag: `git tag vX.Y.Z` (no `-a`, no `-m` — the commit carries the message).
-4. Push: `git push origin main && git push origin vX.Y.Z`.
-5. Create the GitHub Release with auto-generated notes:
+1. Bump `version` in **three places, kept in sync**: `plugin.json`, every skill's
+   frontmatter (`version:` line), and this plugin's entry in the root
+   `.claude-plugin/marketplace.json`.
+2. Commit the bump with a scoped conventional subject
+   (e.g. `feat(session-tracker): … (vX.Y.Z)`) and a bulleted body describing
+   user-visible changes; push `main`.
+3. Create a **per-plugin lightweight tag** and push it:
    ```bash
-   gh release create vX.Y.Z --title "vX.Y.Z — <short summary>" --generate-notes
+   git tag session-tracker-vX.Y.Z && git push origin session-tracker-vX.Y.Z
    ```
-   `--generate-notes` populates the body from commits (and PRs, if any) since the previous tag. No manual copy-pasting from the commit message.
+4. Create the GitHub Release with **explicit notes** — do **not** use
+   `--generate-notes`, which in the monorepo would pull in commits of *other*
+   plugins since the previous tag:
+   ```bash
+   gh release create session-tracker-vX.Y.Z \
+     --title "session-tracker vX.Y.Z — <short summary>" \
+     --notes "<bulleted user-visible changes>"
+   ```
 
 SemVer: patch for hardening/metadata, minor for new config fields or behavior, major for breaking changes (config schema changes that break existing configs).
