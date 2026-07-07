@@ -2,7 +2,7 @@
 name: start
 description: Start a time tracking session or timer. Use when the user says "/start", "start session", "start timer", "begin tracking", "I'm starting work on...", or any similar phrase indicating they want to begin tracking time.
 argument-hint: [task-description-or-url]
-version: 1.4.1
+version: 1.5.0
 allowed-tools: Read, Bash, WebFetch
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: stop
 description: Stop the current time tracking session or timer. Takes no arguments — always stops the currently running entry. Use when the user says "/stop", "stop session", "stop timer", "end session", "I'm done", "finished working", or any similar phrase indicating they want to stop tracking time.
-version: 1.4.1
+version: 1.5.0
 allowed-tools: Read, Bash
 ---
 
