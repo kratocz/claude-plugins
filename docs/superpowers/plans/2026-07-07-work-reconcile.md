@@ -500,7 +500,7 @@ Adds the busy-map/coverage diff (so only missing time is proposed) and the inter
 
 **Interfaces:**
 - Consumes: project-tagged `blocks` with `minutes`/`origin`/`origin_marks` from Task 4; `effective_config.reconcile.coverage_*` and `sink.target`.
-- Produces: `approved` — the list of blocks (with possibly user-edited `minutes`/`project`/`title`) the user explicitly OK'd for writing; plus any manually-added phone-call blocks (`source='manual'`, `origin='manual'`).
+- Produces: `approved` — the list of blocks (with possibly user-edited `minutes`/`project`/`title`) the user explicitly OK'd for writing; plus any manually-added phone-call blocks (`source='manual'`, `origin='manual'`). When `sink.target` includes `clickup`, each approved block also carries `clickup_task_id` (chosen in review) — consumed by Task 6's ClickUp write.
 
 - [ ] **Step 1: Write step 7 — "Diff against existing timesheet"**
 
@@ -561,6 +561,15 @@ Append:
      user supplies a duration** — force the prompt; never write a `null`.
    - **A block with `'project?'` in `origin_marks` CANNOT be approved until the
      user picks a project.**
+   - **If `sink.target` includes `clickup`:** a ClickUp time entry must attach to
+     a `task_id` (AI sessions / commits / meetings have no inherent ClickUp
+     task). So for each block the user approves for a ClickUp write, prompt them
+     to pick the target ClickUp task — offer a shortlist from
+     `clickup_filter_tasks` (assigned to the user, active) via `AskUserQuestion`,
+     or let them paste a task ID / custom ID (e.g. `DEV-1234`). Store it as the
+     block's `clickup_task_id`. A block **CANNOT** be approved for a ClickUp
+     write without a `clickup_task_id`. (Toggl writes need no task — this gate
+     applies only to the ClickUp sink.)
    - Offer **"+ přidat ruční položku"** (phone call): ask start, duration,
      project, description → append as `source='manual'`, `origin='manual'`,
      fully specified.
@@ -612,22 +621,27 @@ Append:
    / header, so it stays out of `ps` and transcripts. Do all time conversion
    with `date`, never by hand.
 
-   **Toggl** — `POST /api/v9/workspaces/<wid>/time_entries` with `start`
-   (UTC ISO), `duration` (seconds), `description`, `project_id`,
-   `billable` (from `sink.billable`), and `tags` including
-   `sink.reconciled_tag`:
+   **Toggl** — `POST /api/v9/workspaces/<wid>/time_entries`. Use the **exact
+   auth pattern proven in `session-tracker`'s `/log-entry`**: Basic auth via
+   `curl --config -` fed on stdin (so the key stays out of argv), with the
+   credential line `user = "<token>:api_token"`. Body carries `start` (UTC ISO),
+   `duration` (seconds), `description`, `project_id` (only when resolved),
+   `billable` (from `sink.billable`), and `tags` including `sink.reconciled_tag`:
    ```bash
    KEY=<toggl api_key read into a shell var, not echoed>
-   printf '%s' "$KEY" | curl -s --netrc-file /dev/stdin \
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -sS --config - \
+     -H "Content-Type: application/json" \
      -X POST "https://api.track.toggl.com/api/v9/workspaces/<wid>/time_entries" \
-     -H 'Content-Type: application/json' \
-     -d '{"start":"<utc>","duration":<secs>,"description":"<desc>",
-          "project_id":<pid>,"billable":<bool>,"created_with":"work-reconcile",
-          "tags":["<reconciled_tag>"]}'
+     --data-binary '{"created_with":"work-reconcile","workspace_id":<wid>,
+       "start":"<utc>","duration":<secs>,"description":"<desc>",
+       "billable":<bool>,"tags":["<reconciled_tag>"]}'
    ```
+   (Add `"project_id":<pid>` only when a project was resolved.)
    **ClickUp** — `mcp__plugin_ntit-common_clickup__clickup_add_time_entry`
-   with `task_id`, `start` (`YYYY-MM-DD HH:MM`), `duration` (`Xh Ym`),
-   `description`, `billable`, `tags:[<reconciled_tag>]`.
+   with `task_id` (the block's `clickup_task_id`, chosen during review — Task 5),
+   `start` (`YYYY-MM-DD HH:MM`), `duration` (`Xh Ym`), `description`, `billable`,
+   `tags:[<reconciled_tag>]`. A block without a `clickup_task_id` was never
+   approved for ClickUp (Task 5 gate) — skip it for this sink.
 
    **Per-item failure isolation:** if one write fails, record the error and
    **continue** with the rest; never abort the whole batch.
