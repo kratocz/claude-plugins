@@ -48,6 +48,8 @@ automatically: the flow is always **propose → confirm → write**.
      `calendar.exclude_all_day=true`, `calendar.exclude_declined=true`,
      `calendar.exclude_keywords=["oběd","lunch","dovolená"]`,
      `sink.target=toggl`, `sink.billable=true`, `sink.reconciled_tag=reconciled`.
+     `calendar.as_work` also gates the Calendar source: when false, Calendar is
+     not fetched at all.
 
 2. **Resolve the window `[since, until]`.**
    - `until`: `--until` if given (bare date → `T23:59:59` local), else now.
@@ -128,8 +130,9 @@ automatically: the flow is always **propose → confirm → write**.
    - `origin_marks=[]`.
    - Clip `start`/`end` to `[since, until]` if the session spills over an edge.
 
-   **B. Google Calendar** (primary, if `calendar` source enabled and MCP
-   present — probe `select:mcp__claude_ai_Google_Calendar__list_events`):
+   **B. Google Calendar** (primary, if
+   `effective_config.reconcile.calendar.as_work` is true and MCP present —
+   probe `select:mcp__claude_ai_Google_Calendar__list_events`):
 
    Call `mcp__claude_ai_Google_Calendar__list_events` for `[since, until]`. For
    each returned event, apply the work filter from
