@@ -247,3 +247,67 @@ automatically: the flow is always **propose → confirm → write**.
      rows.
    - If `project_filter` is set, drop any newly-promoted `commit-only` block
      whose paired `project` does not match it (same rule as step 5's filter).
+
+7. **Diff against what is already logged** — propose only the missing time.
+   - Load existing entries for `[since, until]` **only from the trackers in
+     `sink.target`** (reading a ClickUp busy-map is pointless when writing only
+     to Toggl). Toggl: `mcp__toggl__toggl_get_time_entries`
+     (`start_date`/`end_date`); ClickUp: its time-entries listing. Each existing
+     entry → (start, end, project).
+   - Build a **busy map** per (project, day): the union of already-logged
+     intervals. Entries with no project go into a general per-day bucket.
+   - For each candidate block, split it per calendar day if it crosses midnight,
+     then compute against the same (project, day):
+     ```
+     overlap  = minutes of the block already inside busy intervals
+     coverage = overlap / block_minutes        (block_minutes>0)
+     ```
+   - Decide with `coverage_covered` (0.9) and `coverage_missing` (0.1):
+     - `coverage >= coverage_covered` → **COVERED**: drop the block; count it for
+       the summary line only.
+     - `coverage_missing <= coverage < coverage_covered` → **PARTIAL**: keep, but
+       set proposed `minutes = round(block_minutes - overlap)`; label
+       `~<m>m (doplněk k <overlap>m)`.
+     - `coverage < coverage_missing` → **MISSING**: keep whole block; label
+       `~<m>m (chybí)`.
+   - `commit-only` blocks (`minutes=null`) skip coverage math (nothing to
+     measure) and always appear, flagged to fill in.
+
+8. **Review — the heart of "confirm".** First print a **grouped table**
+   (by project, then day), each row: proposed minutes + origin label +
+   `origin_marks`. End with a summary line: `N návrhů (Σ h) · K pokrytých skryto
+   · M bez času`. Example:
+
+   ```
+   Projekt X — po 2026-06-02
+     ~90m  fix auth bug        (AI, gap-capped)  [git✓ 3c, PR#42✓]
+      35m  code review          (doplněk k 25m)   [GitHub✓]
+      60m  Sprint planning      (kalendář)
+      ?    hotfix deploy         (jen commit — DOPLŇ ČAS)
+   Souhrn: 12 návrhů (8.5 h) · 5 pokrytých skryto · 1 bez času
+   ```
+
+   Then approve **in batches** via `AskUserQuestion`, one group (project/day) at
+   a time, options: **Vše / Vybrat / Přeskočit / Upravit časy**.
+   - **Vybrat** → list the group's items so the user picks a subset.
+   - **Upravit** → let the user overwrite `minutes` (and optionally
+     `project`/`title`) on a chosen item.
+   - **A block with `minutes=null` (the `?` items) CANNOT be approved until the
+     user supplies a duration** — force the prompt; never write a `null`.
+   - **A block with `'project?'` in `origin_marks` CANNOT be approved until the
+     user picks a project.**
+   - **If `sink.target` includes `clickup`:** a ClickUp time entry must attach to
+     a `task_id` (AI sessions / commits / meetings have no inherent ClickUp
+     task). So for each block the user approves for a ClickUp write, prompt them
+     to pick the target ClickUp task — offer a shortlist from
+     `clickup_filter_tasks` (assigned to the user, active) via `AskUserQuestion`,
+     or let them paste a task ID / custom ID (e.g. `DEV-1234`). Store it as the
+     block's `clickup_task_id`. A block **CANNOT** be approved for a ClickUp
+     write without a `clickup_task_id`. (Toggl writes need no task — this gate
+     applies only to the ClickUp sink.)
+   - Offer **"+ přidat ruční položku"** (phone call): ask start, duration,
+     project, description → append as `source='manual'`, `origin='manual'`,
+     fully specified.
+   Everything the user OKs goes into `approved`. Nothing else is written.
+   If `dry_run`, stop here after printing what *would* be written, grouped like
+   the summary; write nothing.
