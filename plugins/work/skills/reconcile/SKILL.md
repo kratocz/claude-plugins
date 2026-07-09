@@ -72,3 +72,75 @@ automatically: the flow is always **propose → confirm → write**.
      `--dry-run` was passed.
    - **Echo the resolved window** before doing anything else, e.g. "Dorovnávám
      výkaz od **<since>** do **<until>**." so an unexpected default is visible.
+
+3. **Fetch all enabled sources — IN PARALLEL** where they are MCP calls (one
+   message, multiple tool_use blocks). Probe each MCP source with `ToolSearch`
+   first; if absent, append a warning and skip. Build the list `blocks`.
+
+   **A. Claude Code session logs** (primary, if
+   `effective_config.reconcile.ai_sessions.enabled`):
+
+   Session logs live under `<projects_dir>/<encoded-path>/*.jsonl`, one file per
+   session. The directory name is the working directory with `/` → `-`. Each
+   line is a JSON object with `timestamp` (ISO 8601 UTC), `type`
+   (`user`/`assistant`/`ai-title`/…). Find sessions overlapping the window and
+   turn each into one `candidate_block`:
+
+   ```bash
+   DIR="${projects_dir/#\~/$HOME}"        # expand ~
+   SINCE_UTC=$(date -u -j -f "%Y-%m-%dT%H:%M:%S" "<since>" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+             || date -u -d "<since>" +%Y-%m-%dT%H:%M:%SZ)
+   UNTIL_UTC=$(date -u -j -f "%Y-%m-%dT%H:%M:%S" "<until>" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+             || date -u -d "<until>" +%Y-%m-%dT%H:%M:%SZ)
+   find "$DIR" -name '*.jsonl' -type f
+   ```
+
+   For each `*.jsonl`, extract with a small Python filter (robust to non-JSON
+   lines) the sorted list of message timestamps and the `ai-title` value:
+
+   ```bash
+   python3 - "$f" "$SINCE_UTC" "$UNTIL_UTC" <<'PY'
+   import json, sys
+   f, since, until = sys.argv[1], sys.argv[2], sys.argv[3]
+   ts, title = [], None
+   for line in open(f, encoding='utf-8'):
+       try: d = json.loads(line)
+       except Exception: continue
+       t = d.get('timestamp')
+       if t: ts.append(t)
+       if d.get('type') == 'ai-title':
+           title = (d.get('content') or title)
+   ts = sorted(t for t in ts if t)
+   if not ts: sys.exit(0)
+   # keep session if it overlaps [since, until]
+   if ts[-1] < since or ts[0] > until: sys.exit(0)
+   print(json.dumps({'first': ts[0], 'last': ts[-1], 'n': len(ts),
+                     'title': title, 'ts': ts}))
+   PY
+   ```
+
+   For each surviving session, create a `candidate_block`:
+   - `source='ai'`, `raw_messages_ts=ts` (kept for Task 3's duration math),
+     `start`/`end` = first/last ts **converted to local** (via `date`),
+     `title` = the `ai-title` (or, if null, "Práce v <dir>"),
+   - `project_hint` = the repo/dir name decoded from the directory name (last
+     path segment of the decoded working directory),
+   - `origin_marks=[]`.
+   - Clip `start`/`end` to `[since, until]` if the session spills over an edge.
+
+   **B. Google Calendar** (primary, if `calendar` source enabled and MCP
+   present — probe `select:mcp__claude_ai_Google_Calendar__list_events`):
+
+   Call `mcp__claude_ai_Google_Calendar__list_events` for `[since, until]`. For
+   each returned event, apply the work filter from
+   `effective_config.reconcile.calendar`:
+   - drop all-day events if `exclude_all_day`,
+   - drop events the user declined if `exclude_declined`,
+   - drop events whose title matches any `exclude_keywords` (case-insensitive
+     substring).
+   Each surviving event → a `candidate_block` with `source='calendar'`,
+   `start`/`end` = event start/end (local), `title` = event summary,
+   `project_hint` = null (resolved in Task 4), `origin_marks=[]`,
+   `raw_messages_ts=[]`.
+   If the MCP is absent, append a one-line warning "Kalendář nedostupný —
+   schůzky vynechány." and skip.
