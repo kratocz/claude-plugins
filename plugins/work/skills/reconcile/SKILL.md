@@ -148,6 +148,27 @@ automatically: the flow is always **propose → confirm → write**.
    If the MCP is absent, append a one-line warning "Kalendář nedostupný —
    schůzky vynechány." and skip.
 
+   **C. Confirmatory sources** (git always; GitHub/ClickUp if enabled+present):
+
+   - **git** (local, free): in the current repo (and, if configured, each repo
+     under a known root), collect commits authored by the user in the window:
+     ```bash
+     git log --all --since="<since>" --until="<until>" \
+       --author="$(git config user.email)" \
+       --pretty='%h|%aI|%s' 2>/dev/null
+     ```
+     Each commit is a confirmatory hit with a timestamp, its repo name, and
+     subject. Not a block yet — see step 5.
+   - **GitHub** (probe `select:mcp__github__search_pull_requests`): search PRs
+     reviewed/merged and issues closed by
+     `effective_config.sources.github.username` in the window. Each is a
+     confirmatory hit (timestamp = merged/review time, subject = title).
+   - **ClickUp** (probe `select:mcp__plugin_ntit-common_clickup__clickup_filter_tasks`):
+     tasks updated by the user in the window via `clickup_filter_tasks`;
+     optionally `clickup_get_task_comments` for the user's comments. Confirmatory
+     hits (timestamp = update/comment time, subject = task name).
+   Absent MCP → warn once, skip that source.
+
 4. **Estimate a duration for each block.** The estimate is always a *default to
    hand-edit*, never authoritative.
 
@@ -192,3 +213,33 @@ automatically: the flow is always **propose → confirm → write**.
    | `ai-gapcapped` | `~<m>m (AI, gap-capped)` |
    | `calendar-exact` | `<m>m (kalendář)` |
    | `commit-only` | `? (jen commit — DOPLŇ ČAS)` |
+
+5. **Pair every block to a project** (same mechanism as `/start` and
+   `/log-entry`):
+   - Fetch active Toggl projects (`mcp__toggl__toggl_list_projects`, or the
+     `session-tracker` key fallback).
+   - For AI blocks: match `project_hint` (repo/dir name) case-insensitively
+     against project names; on a hit set `project`. For Calendar blocks with no
+     hint, leave `project=null` for now.
+   - Fallback to `sources.toggl.default_project_id` /
+     `session-tracker` `default_project_id` if no match (may be null).
+   - If still unresolved, set `project=null` and add `'project?'` to
+     `origin_marks` — the review (Task 5) will force the user to pick before this
+     block can be approved.
+   - If `project_filter` (`--project`) is set, drop blocks whose resolved
+     `project` does not match it (case-insensitive substring).
+
+6. **Fold confirmatory hits into blocks — never double-count.** For each
+   confirmatory hit (git commit / GitHub PR / ClickUp update):
+   - If its timestamp falls **inside** an existing AI block's `[start, end]`
+     (same repo/project where determinable), attach it: add a mark to that
+     block's `origin_marks` (`git✓ Nc` with a commit count, `gh✓ #<pr>`,
+     `clickup✓`), and optionally enrich the block `title`. Do **not** create a
+     new block and do **not** add time.
+   - If it falls **outside** every AI block, promote it to a standalone
+     `candidate_block` with `source='commit'` (or `gh`/`clickup`),
+     `origin='commit-only'`, `minutes=null` (unknown — user must fill in),
+     `start` = the hit timestamp, `end` = null, `project` paired from its repo.
+   - Merge multiple outside-hits that are close in time on the same project into
+     one `commit-only` block (list their subjects) to avoid a flood of tiny
+     rows.
