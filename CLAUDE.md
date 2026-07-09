@@ -44,6 +44,16 @@ Migration from per-repo to in-repo is in progress; both styles coexist in `marke
    ```
 3. Prepend a row to README.md's **Available plugins** table (newest first).
 
+### Skill convention: dispatch tool in `allowed-tools`
+
+When a skill dispatches subagents, list **both** `Agent` and `Task` in its
+`allowed-tools` frontmatter. Current Claude Code names the dispatch tool
+`Agent`, older versions named it `Task`; unknown names in `allowed-tools` are
+ignored, so listing both is harmless and keeps the skill portable across the
+Claude Code versions plugin users run. Don't "clean up" the seemingly
+redundant entry — a wrong single name silently blocks the subagent-dependent
+part of the skill.
+
 ## Adding a new plugin (external repo)
 
 For plugins maintained in their own GitHub repo:
@@ -84,11 +94,28 @@ When the user says "Update versions." (or similar):
 
 README has no version numbers — no update needed there.
 
+## Design specs and implementation plans
+
+Non-trivial plugin work (a new skill, a substantial feature) is driven through
+the superpowers brainstorming → planning workflow, which persists two
+artifacts:
+
+- **Design specs** → `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` — the
+  approved design (purpose, decisions, architecture, error handling) before
+  implementation.
+- **Implementation plans** → `docs/superpowers/plans/YYYY-MM-DD-<topic>.md` — the
+  task-by-task plan executed from the spec.
+
+These are dated point-in-time records: once written and implemented, leave a
+spec/plan as-is even after the code moves past it (a later feature gets its own
+dated spec/plan) rather than editing history. Metadata lists at the top of a
+spec use `- ` bullet prefixes so CommonMark renders them as a list.
+
 ## Releasing an in-repo plugin
 
 Commit messages are the single source of truth for release content (same principle as the former standalone-repo workflow).
 
-1. Apply the changes and bump the version in **three places**, kept in sync: `plugins/<name>/.claude-plugin/plugin.json`, every skill's frontmatter (`version:` line), and the plugin's entry in `marketplace.json`.
+1. Apply the changes and bump the version in **three places**, kept in sync: `plugins/<name>/.claude-plugin/plugin.json`, every skill's frontmatter (`version:` line), and the plugin's entry in `marketplace.json`. **Bump _every_ skill's frontmatter, not just the one you touched** — these drift easily (a plugin can ship several skills at the old version while `plugin.json` moves ahead). Verify with `grep -H '^version:' plugins/<name>/skills/*/SKILL.md` before tagging.
 2. Commit with a scoped conventional subject — e.g. `fix(<name>): <summary> (vX.Y.Z)` — and a bulleted body describing user-visible changes; push `main`.
 3. Create a **per-plugin lightweight tag** and push it:
    ```bash
@@ -102,7 +129,7 @@ Commit messages are the single source of truth for release content (same princip
 
 SemVer: patch for fixes/hardening/metadata, minor for new config fields or behavior, major for breaking changes (config schema changes that break existing configs).
 
-First release under this convention: `session-tracker-v1.4.1` (2026-06-12).
+First release under this convention: `session-tracker-v1.4.1` (2026-06-12); since followed by `session-tracker-v1.5.0`, `retro-v0.2.0`, and `work-v0.3.0`.
 
 ## Marketplace name
 

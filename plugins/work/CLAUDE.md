@@ -115,6 +115,9 @@ Same as session-tracker:
 1. Bump `version` in `plugin.json` AND in every skill's frontmatter (keep in sync).
 2. Commit with `feat:` / `fix:` / `chore:` subject and bulleted body.
 3. Lightweight tag: `git tag work-vX.Y.Z` (prefix with plugin name in monorepo).
-4. Push and create GitHub Release with `gh release create work-vX.Y.Z --generate-notes`.
+4. Push, then create the GitHub Release with **explicit notes** — do **not** use `--generate-notes`, which in the monorepo would pull in commits of *other* plugins since the previous tag:
+   ```bash
+   gh release create work-vX.Y.Z --title "work vX.Y.Z — <short summary>" --notes "<bulleted user-visible changes>"
+   ```
 
 SemVer: patch for hardening, minor for new sources/config fields, major for breaking config schema changes.
