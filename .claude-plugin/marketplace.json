@@ -23,7 +23,7 @@
       "name": "work",
       "source": "./plugins/work",
       "description": "Daily work orchestration — morning briefing, mid-day diff, end-of-day summary, and a standup recap (Toggl + git + GitHub) across Todoist/ClickUp/GitHub/Calendar",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "added": "2026-06-03"
     },
     {

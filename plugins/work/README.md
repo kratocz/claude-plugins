@@ -23,16 +23,26 @@ The skill auto-detects MCP servers available in your Claude Code session and ask
 Daily flow:
 
 ```
-/work-start    # Morning: scored briefing of what to work on
-/work-status   # Anytime: diff since last briefing (what closed, what's new)
-/work-end      # Evening: summary of what got done, what carries over
-/work-standup  # Standup: recap of what you did since last time (Toggl + git + GitHub)
+/work-start     # Morning: scored briefing of what to work on
+/work-status    # Anytime: diff since last briefing (what closed, what's new)
+/work-end       # Evening: summary of what got done, what carries over
+/work-standup   # Standup: recap of what you did since last time (Toggl + git + GitHub)
+/work-reconcile # Period-end: backfill timesheet entries you forgot to log
 ```
 
 `/work-standup` is backward-looking and standalone (no morning snapshot
 needed): it pulls Toggl time entries, git commits, and GitHub reviews/merges
 since the last standup and groups them into a paste-ready recap. Because it
 reads Toggl, it captures review- and ops-heavy work that leaves no commit.
+
+`/work-reconcile` closes the timesheet gap at the end of a period (e.g. the
+end of the month): it reconstructs what you actually worked on — primarily
+from Claude Code session logs, corroborated by git commits, GitHub activity,
+Calendar events, and ClickUp updates — diffs that against what's already
+logged in Toggl/ClickUp, and writes **only the missing time**. It never
+writes anything without asking first: every proposed entry goes through an
+interactive review where you approve, adjust, or skip it before anything is
+sent to the tracker.
 
 ## Supported sources
 

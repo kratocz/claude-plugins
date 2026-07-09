@@ -2,7 +2,7 @@
 name: work-standup
 description: Standup recap — what you actually worked on since the last standup, pulled from Toggl time entries + git commits + GitHub reviews/merges and grouped into a report you can paste into the standup channel. Use when the user says "/work-standup", "standup", "stand-up status", "co jsem dělal od minula", "co jsem udělal od posledního stand-upu", "recap since last standup".
 argument-hint: [--since YYYY-MM-DD[THH:MM]] [--project <name>]
-version: 0.2.0
+version: 0.3.0
 allowed-tools: Read, Bash, ToolSearch, AskUserQuestion, mcp__toggl__toggl_get_time_entries, mcp__toggl__toggl_list_projects, mcp__github__search_issues, mcp__github__search_pull_requests, mcp__github__list_commits
 ---
 
@@ -19,6 +19,7 @@ different question than the others, from different sources:
 | `/work-status` | What changed? | diff vs morning snapshot | since AM |
 | `/work-end`    | What did I close today? | diff vs morning snapshot | today |
 | **`/work-standup`** | **What did I do since last time?** | **Toggl + git + GitHub reviews/merges** | **since last standup** |
+| **`/work-reconcile`** | **What did I do but not log — and fill it in** | **Toggl/ClickUp write** | **back (write)** |
 
 The point of pulling **Toggl** is that a lot of real work — ops firefighting,
 code reviews, meetings — leaves *no commit*. Time entries capture it; git and

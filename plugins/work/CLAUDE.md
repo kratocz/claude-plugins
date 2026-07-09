@@ -15,7 +15,8 @@ work/
 │   ├── start/SKILL.md     ← /work-start
 │   ├── status/SKILL.md    ← /work-status
 │   ├── end/SKILL.md       ← /work-end
-│   └── standup/SKILL.md   ← /work-standup
+│   ├── standup/SKILL.md   ← /work-standup
+│   └── reconcile/SKILL.md ← /work-reconcile
 ├── README.md
 └── CLAUDE.md
 ```
@@ -52,6 +53,31 @@ recap all tracked time. `standup.default_window` sets the default recap start
 per-run with `--since`. Toggl reads prefer the Toggl MCP server and fall back
 to `session-tracker`'s API key when the MCP server is absent.
 
+The top-level `reconcile` block is consumed **only by `/work-reconcile`** and
+is entirely optional — a missing block (or missing individual keys) falls
+back to these built-in defaults:
+
+- `default_window` (`last_month`) — default reconcile window when `--since`/`--until` aren't passed.
+- `gap_threshold_min` (`15`) — inter-message gap, in minutes, below which AI-session time counts in full.
+- `edge_pad_min` (`2`) — padding added per message gap/session edge instead of the full gap.
+- `round_to_min` (`5`) — rounding granularity for estimated block durations.
+- `min_block_min` (`5`) — blocks shorter than this after rounding are dropped as noise.
+- `coverage_covered` (`0.9`) — overlap ratio at/above which a block is considered already logged and dropped.
+- `coverage_missing` (`0.1`) — overlap ratio below which a block is treated as fully missing.
+- `ai_sessions.enabled` (`true`) — whether Claude Code session logs are used as a work source.
+- `ai_sessions.projects_dir` (`~/.claude/projects`) — root directory scanned for session `*.jsonl` files.
+- `calendar.as_work` (`true`) — treat Calendar events as work time; also gates whether the Calendar source is fetched at all.
+- `calendar.exclude_all_day` (`true`) — drop all-day events.
+- `calendar.exclude_declined` (`true`) — drop events the user declined.
+- `calendar.exclude_keywords` (`["oběd", "lunch", "dovolená"]`) — drop events whose title matches any keyword (case-insensitive substring).
+- `sink.target` (`toggl`) — where to write reconciled time: `toggl` | `clickup` | `both`.
+- `sink.billable` (`true`) — billable flag set on written entries.
+- `sink.reconciled_tag` (`reconciled`) — tag applied to every entry the skill writes (also used for idempotency on re-run).
+
+`/work-setup` can optionally write a `reconcile` block letting the user
+override `sink.target` and `default_window`; all other keys keep their
+built-in defaults unless hand-edited in the JSON.
+
 ## Per-project override
 
 `~/.claude/projects/<slug>/memory/work_config.md` — markdown with a fenced `json` block. The skill parses only the JSON block; surrounding prose is for human readers. Deep-merged onto global config (arrays replace, scalars override).
@@ -65,6 +91,7 @@ to `session-tracker`'s API key when the MCP server is absent.
 | `/work-status` | Mid-day | Diffs current state against last briefing snapshot |
 | `/work-end`    | Evening | Summarises what got done and what carries over |
 | `/work-standup`| Standup | Recap since last standup from Toggl + git + GitHub reviews/merges; paste-ready |
+| `/work-reconcile`| Period-end (e.g. monthly) | Backfills missing timesheet entries — reconstructs work from Claude Code sessions/Calendar/git/GitHub/ClickUp, diffs against what's logged, writes only the gap after user approval |
 
 ## Scoring formula
 

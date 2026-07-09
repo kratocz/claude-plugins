@@ -1,7 +1,7 @@
 ---
 name: work-setup
 description: Configure the work plugin — detect available MCP sources (Todoist, GitHub, ClickUp, Google Calendar) and write ~/.claude/plugins/work/config.json. Use when the user says "/work-setup", "configure work", or when /work-start fails because config is missing.
-version: 0.2.0
+version: 0.3.0
 allowed-tools: Read, Write, Bash, ToolSearch, AskUserQuestion, mcp__plugin_ntit-common_clickup__clickup_get_workspace_members
 ---
 
@@ -64,7 +64,36 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
    (mcp_prefix is the prefix used during detection in step 2 — e.g. `mcp__claude_ai_Todoist__`.)
 
-4. **Scoring config**:
+4. **Optional: timesheet reconciliation** (`/work-reconcile`):
+
+   Ask via AskUserQuestion: "Nastavit dorovnávání výkazů (`/work-reconcile`)?" / "Configure timesheet reconciliation (`/work-reconcile`)?". Options:
+   - "Ne, použít výchozí (Recommended)" / "No, use defaults (Recommended)" — skip; write nothing under `reconcile` (the skill falls back to its built-in defaults at runtime).
+   - "Ano, nastavit" / "Yes, configure"
+
+   In edit mode, mark the option matching whether `existing_config.reconcile` is present as recommended.
+
+   If the user picks "Ano"/"Yes":
+
+   Ask via AskUserQuestion: "Kam zapisovat dorovnaný čas?" / "Where should reconciled time be written?". Options:
+   - "Toggl (Recommended)" — `sink.target: "toggl"`
+   - "ClickUp" — `sink.target: "clickup"`
+   - "Obojí" / "Both" — `sink.target: "both"`
+
+   In edit mode, prefill the option matching `existing_config.reconcile.sink.target` (default `toggl`).
+
+   Ask via AskUserQuestion: "Jaké výchozí období dorovnávat?" / "What's the default reconcile window?". Options:
+   - "Minulý měsíc (Recommended)" / "Last month (Recommended)" — `default_window: "last_month"`
+   - "Minulý týden" / "Last week" — `default_window: "last_week"`
+
+   In edit mode, prefill the option matching `existing_config.reconcile.default_window` (default `last_month`).
+
+   Store the result as:
+   ```json
+   { "reconcile": { "default_window": "<chosen>", "sink": { "target": "<chosen>" } } }
+   ```
+   All other `reconcile` keys (`gap_threshold_min`, `edge_pad_min`, `round_to_min`, `min_block_min`, `coverage_covered`, `coverage_missing`, `ai_sessions.*`, `calendar.*`, `sink.billable`, `sink.reconciled_tag`) are not configurable here in v1 — they keep the skill's built-in defaults unless the user edits the JSON manually.
+
+5. **Scoring config**:
 
    Ask via AskUserQuestion: "Použít výchozí scoring váhy (priority=40, due=30, age=15, type=15)?" / "Use default scoring weights (priority=40, due=30, age=15, type=15)?"
 
@@ -75,7 +104,7 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
    In edit mode, prefill defaults with existing values.
 
-5. **Language**:
+6. **Language**:
 
    Look for an existing language preference:
    - Try Read on `~/.claude/plugins/session-tracker/config.json`. If it exists and has a `language` field, use that as the default.
@@ -83,7 +112,7 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
    Ask: "Jazyk pro výstup briefingu? (kód jako en, cs, de — výchozí: <detected_or_cs>)". Accept any 2-letter ISO 639-1 code. Store as top-level `language`.
 
-6. **Write global config**:
+7. **Write global config**:
 
    Ensure the config directory exists:
    ```bash
@@ -93,7 +122,7 @@ Configure the work plugin: detect which MCP sources are available in this sessio
    Build the config object in memory:
    ```json
    {
-     "language": "<from step 5>",
+     "language": "<from step 6>",
      "sources": {
        "todoist":         { "enabled": <bool>, "mcp_prefix": "mcp__claude_ai_Todoist__", "filters": { "priorities": ["p1", "p2"], "scope": "today_and_overdue" } },
        "github":          { "enabled": <bool>, "mcp_prefix": "mcp__github__", "username": "...", "include": ["assigned_issues", "review_requested_prs", "my_open_prs"] },
@@ -109,9 +138,11 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
    **Important:** include ALL four sources in the JSON even if some are disabled or weren't detected in this session. Sources that weren't detected get `enabled: false` and the canonical `mcp_prefix` from the detection table (so the user can manually enable later when they add the MCP server). Sources that were detected but the user said "No" also get `enabled: false` but keep any collected metadata (username, member_id).
 
+   If step 4 collected a `reconcile` block, merge it in as a top-level `reconcile` key alongside `sources` and `scoring`. If step 4 was skipped, omit `reconcile` entirely — do not write an empty object.
+
    Use the Write tool to write the JSON to `~/.claude/plugins/work/config.json` with 2-space indentation.
 
-7. **Optional per-project override**:
+8. **Optional per-project override**:
 
    Detect the current project's slug:
    ```bash
@@ -171,7 +202,7 @@ Configure the work plugin: detect which MCP sources are available in this sessio
 
    If MEMORY.md already contains a line referencing `work_config.md`, don't add a duplicate.
 
-8. **Confirm**:
+9. **Confirm**:
 
    Print a summary in the configured language:
    ```

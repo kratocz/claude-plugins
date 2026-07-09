@@ -122,7 +122,7 @@ automatically: the flow is always **propose → confirm → write**.
    ```
 
    For each surviving session, create a `candidate_block`:
-   - `source='ai'`, `raw_messages_ts=ts` (kept for Task 3's duration math),
+   - `source='ai'`, `raw_messages_ts=ts` (kept for the duration math later, step 4),
      `start`/`end` = first/last ts **converted to local** (via `date`),
      `title` = the `ai-title` (or, if null, "Práce v <dir>"),
    - `project_hint` = the repo/dir name decoded from the directory name (last
@@ -143,7 +143,7 @@ automatically: the flow is always **propose → confirm → write**.
      substring).
    Each surviving event → a `candidate_block` with `source='calendar'`,
    `start`/`end` = event start/end (local), `title` = event summary,
-   `project_hint` = null (resolved in Task 4), `origin_marks=[]`,
+   `project_hint` = null (resolved during project pairing, step 5), `origin_marks=[]`,
    `raw_messages_ts=[]`.
    If the MCP is absent, append a one-line warning "Kalendář nedostupný —
    schůzky vynechány." and skip.
@@ -195,7 +195,7 @@ automatically: the flow is always **propose → confirm → write**.
    secs = 0
    for a,b in zip(ts, ts[1:]):
        gap = (m(b)-m(a)).total_seconds()/60
-       secs += min(gap, 0)*0 + (gap if gap<=G else E)
+       secs += gap if gap<=G else E
    secs += E
    print(round(secs))
    PY
@@ -207,7 +207,7 @@ automatically: the flow is always **propose → confirm → write**.
    `round_to_min` (no gap-capping — a meeting is contiguous). Set
    `origin='calendar-exact'`.
 
-   **Origin marks** drive the review display (Task 5):
+   **Origin marks** drive the review display (step 8):
    | `origin` | Review label |
    |----------|--------------|
    | `ai-gapcapped` | `~<m>m (AI, gap-capped)` |
@@ -224,7 +224,7 @@ automatically: the flow is always **propose → confirm → write**.
    - Fallback to `sources.toggl.default_project_id` /
      `session-tracker` `default_project_id` if no match (may be null).
    - If still unresolved, set `project=null` and add `'project?'` to
-     `origin_marks` — the review (Task 5) will force the user to pick before this
+     `origin_marks` — the review (step 8) will force the user to pick before this
      block can be approved.
    - If `project_filter` (`--project`) is set, drop blocks whose resolved
      `project` does not match it (case-insensitive substring).
@@ -344,10 +344,10 @@ automatically: the flow is always **propose → confirm → write**.
    ```
    (Add `"project_id":<pid>` only when a project was resolved.)
    **ClickUp** — `mcp__plugin_ntit-common_clickup__clickup_add_time_entry`
-   with `task_id` (the block's `clickup_task_id`, chosen during review — Task 5),
+   with `task_id` (the block's `clickup_task_id`, chosen during review — step 8),
    `start` (`YYYY-MM-DD HH:MM`), `duration` (`Xh Ym`), `description`, `billable`,
    `tags:[<reconciled_tag>]`. A block without a `clickup_task_id` was never
-   approved for ClickUp (Task 5 gate) — skip it for this sink.
+   approved for ClickUp (the step 8 gate) — skip it for this sink.
 
    **Per-item failure isolation:** if one write fails, record the error and
    **continue** with the rest; never abort the whole batch.
