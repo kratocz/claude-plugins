@@ -3,7 +3,7 @@ name: work-reconcile
 description: Backfill missing timesheet entries at the end of a period. Reconstructs what you actually worked on — primarily from Claude Code session logs, confirmed by git/GitHub/Calendar/ClickUp — diffs it against what is already logged in Toggl/ClickUp, and after you approve each item writes only the missing time. Use when the user says "/work-reconcile", "doplň výkaz", "dorovnej timesheet", "co jsem zapomněl vykázat", "fill my timesheet", "reconcile my hours", "co chybí ve výkazu za minulý měsíc".
 argument-hint: [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--project <name>] [--dry-run]
 version: 0.3.0
-allowed-tools: Read, Bash, ToolSearch, AskUserQuestion, mcp__toggl__toggl_get_time_entries, mcp__toggl__toggl_list_projects, mcp__github__search_pull_requests, mcp__github__search_issues, mcp__github__list_commits, mcp__plugin_ntit-common_clickup__clickup_filter_tasks, mcp__plugin_ntit-common_clickup__clickup_get_task_comments, mcp__plugin_ntit-common_clickup__clickup_add_time_entry, mcp__claude_ai_Google_Calendar__list_events
+allowed-tools: Read, Bash, ToolSearch, AskUserQuestion, mcp__toggl__toggl_get_time_entries, mcp__toggl__toggl_list_projects, mcp__github__search_pull_requests, mcp__github__search_issues, mcp__github__list_commits, mcp__plugin_ntit-common_clickup__clickup_filter_tasks, mcp__plugin_ntit-common_clickup__clickup_get_task_comments, mcp__plugin_ntit-common_clickup__clickup_get_time_entries, mcp__plugin_ntit-common_clickup__clickup_add_time_entry, mcp__claude_ai_Google_Calendar__list_events
 ---
 
 # Work Reconcile
@@ -251,9 +251,16 @@ automatically: the flow is always **propose → confirm → write**.
 7. **Diff against what is already logged** — propose only the missing time.
    - Load existing entries for `[since, until]` **only from the trackers in
      `sink.target`** (reading a ClickUp busy-map is pointless when writing only
-     to Toggl). Toggl: `mcp__toggl__toggl_get_time_entries`
-     (`start_date`/`end_date`); ClickUp: its time-entries listing. Each existing
-     entry → (start, end, project).
+     to Toggl). Toggl: `mcp__toggl__toggl_get_time_entries` (`start_date`/
+     `end_date`). ClickUp: probe `select:mcp__plugin_ntit-common_clickup__clickup_get_time_entries`
+     first; if present, call it with `start_date`/`end_date` and
+     `assignee=["me"]`-equivalent (omit `assignee` — it defaults to the
+     authenticated user's own entries, which is what a personal reconcile
+     wants). If the tool is absent, treat the ClickUp busy-map as **best-effort:
+     skip it, warn once** ("ClickUp historie nedostupná — kontrola překryvu jen
+     přes Togglu."), and fall through to Toggl-only coverage for ClickUp-bound
+     blocks (they will simply not be marked COVERED by pre-existing ClickUp
+     entries). Each existing entry → (start, end, project).
    - Build a **busy map** per (project, day): the union of already-logged
      intervals. Entries with no project go into a general per-day bucket.
    - For each candidate block, split it per calendar day if it crosses midnight,
@@ -311,3 +318,51 @@ automatically: the flow is always **propose → confirm → write**.
    Everything the user OKs goes into `approved`. Nothing else is written.
    If `dry_run`, stop here after printing what *would* be written, grouped like
    the summary; write nothing.
+
+9. **Write the approved entries.** For each item in `approved`, write to every
+   tracker in `sink.target` (`toggl`, `clickup`, or `both`).
+
+   **Safety (identical to `session-tracker`'s `/log-entry`):** never put the API
+   key in argv. Read it into a shell variable and pass it via a stdin-fed config
+   / header, so it stays out of `ps` and transcripts. Do all time conversion
+   with `date`, never by hand.
+
+   **Toggl** — `POST /api/v9/workspaces/<wid>/time_entries`. Use the **exact
+   auth pattern proven in `session-tracker`'s `/log-entry`**: Basic auth via
+   `curl --config -` fed on stdin (so the key stays out of argv), with the
+   credential line `user = "<token>:api_token"`. Body carries `start` (UTC ISO),
+   `duration` (seconds), `description`, `project_id` (only when resolved),
+   `billable` (from `sink.billable`), and `tags` including `sink.reconciled_tag`:
+   ```bash
+   KEY=<toggl api_key read into a shell var, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -sS --config - \
+     -H "Content-Type: application/json" \
+     -X POST "https://api.track.toggl.com/api/v9/workspaces/<wid>/time_entries" \
+     --data-binary '{"created_with":"work-reconcile","workspace_id":<wid>,
+       "start":"<utc>","duration":<secs>,"description":"<desc>",
+       "billable":<bool>,"tags":["<reconciled_tag>"]}'
+   ```
+   (Add `"project_id":<pid>` only when a project was resolved.)
+   **ClickUp** — `mcp__plugin_ntit-common_clickup__clickup_add_time_entry`
+   with `task_id` (the block's `clickup_task_id`, chosen during review — Task 5),
+   `start` (`YYYY-MM-DD HH:MM`), `duration` (`Xh Ym`), `description`, `billable`,
+   `tags:[<reconciled_tag>]`. A block without a `clickup_task_id` was never
+   approved for ClickUp (Task 5 gate) — skip it for this sink.
+
+   **Per-item failure isolation:** if one write fails, record the error and
+   **continue** with the rest; never abort the whole batch.
+
+   **Idempotency:** before writing, and on any re-run, treat an existing entry
+   that already carries `sink.reconciled_tag` overlapping the same block as
+   already-written and skip it (belt-and-braces on top of the coverage diff, so
+   a second `/work-reconcile` writes nothing).
+
+   **No sink credentials** (neither Toggl nor ClickUp key available): do not
+   write. Instead offer an **export** — print the approved items as a Markdown
+   table (and offer to save a `.csv`) so the user can paste them manually. Say
+   so explicitly.
+
+10. **Summary.** Print what happened: per project, entries written (with
+    durations) and total; then a line each for skipped-as-covered, skipped
+    (user), and failed (with the error). If nothing was written, say why
+    (dry-run / no approvals / no credentials).
