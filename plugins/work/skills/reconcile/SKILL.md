@@ -239,7 +239,11 @@ automatically: the flow is always **propose → confirm → write**.
    - If it falls **outside** every AI block, promote it to a standalone
      `candidate_block` with `source='commit'` (or `gh`/`clickup`),
      `origin='commit-only'`, `minutes=null` (unknown — user must fill in),
-     `start` = the hit timestamp, `end` = null, `project` paired from its repo.
+     `start` = the hit timestamp, `end` = null, `project` resolved by step 5's
+     matching procedure applied to the hit's repo name (so it can also end up
+     `null` with a `'project?'` mark).
    - Merge multiple outside-hits that are close in time on the same project into
      one `commit-only` block (list their subjects) to avoid a flood of tiny
      rows.
+   - If `project_filter` is set, drop any newly-promoted `commit-only` block
+     whose paired `project` does not match it (same rule as step 5's filter).
