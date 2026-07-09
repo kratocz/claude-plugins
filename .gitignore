@@ -6,6 +6,10 @@ out/
 
 # macOS
 .DS_Store
+._*
 
 # Linux
 *~
+
+# Superpowers subagent-driven-development scratch (progress ledger, briefs, reports)
+.superpowers/
