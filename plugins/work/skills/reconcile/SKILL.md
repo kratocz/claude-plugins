@@ -147,3 +147,48 @@ automatically: the flow is always **propose → confirm → write**.
    `raw_messages_ts=[]`.
    If the MCP is absent, append a one-line warning "Kalendář nedostupný —
    schůzky vynechány." and skip.
+
+4. **Estimate a duration for each block.** The estimate is always a *default to
+   hand-edit*, never authoritative.
+
+   **AI blocks — gap-capping** (`raw_messages_ts` sorted, UTC is fine here since
+   we only take differences). With `G = gap_threshold_min`, `E = edge_pad_min`:
+
+   ```
+   minutes_raw = 0
+   for consecutive (a, b) in raw_messages_ts:
+       gap = (b - a) in minutes
+       minutes_raw += gap if gap <= G else E     # long pause = break → only pad
+   minutes_raw += E                               # trailing pad after last msg
+   ```
+
+   Rationale: a session left open overnight has one huge inter-message gap; it
+   contributes only one `E`, not 8 hours. Compute in Python:
+
+   ```bash
+   python3 - <<'PY'
+   from datetime import datetime
+   ts = [ ... raw_messages_ts ... ]
+   G, E = 15, 2   # from config
+   def m(x): return datetime.fromisoformat(x.replace('Z','+00:00'))
+   secs = 0
+   for a,b in zip(ts, ts[1:]):
+       gap = (m(b)-m(a)).total_seconds()/60
+       secs += min(gap, 0)*0 + (gap if gap<=G else E)
+   secs += E
+   print(round(secs))
+   PY
+   ```
+   Then round to `round_to_min` and set `minutes`. If `minutes < min_block_min`,
+   drop the block as noise. Set `origin='ai-gapcapped'`.
+
+   **Calendar blocks:** `minutes` = exact `(end - start)` rounded to
+   `round_to_min` (no gap-capping — a meeting is contiguous). Set
+   `origin='calendar-exact'`.
+
+   **Origin marks** drive the review display (Task 5):
+   | `origin` | Review label |
+   |----------|--------------|
+   | `ai-gapcapped` | `~<m>m (AI, gap-capped)` |
+   | `calendar-exact` | `<m>m (kalendář)` |
+   | `commit-only` | `? (jen commit — DOPLŇ ČAS)` |
