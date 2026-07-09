@@ -213,6 +213,7 @@ automatically: the flow is always **propose → confirm → write**.
    | `ai-gapcapped` | `~<m>m (AI, gap-capped)` |
    | `calendar-exact` | `<m>m (kalendář)` |
    | `commit-only` | `? (jen commit — DOPLŇ ČAS)` |
+   | `manual` | `<m>m (ručně)` |
 
 5. **Pair every block to a project** (same mechanism as `/start` and
    `/log-entry`):
@@ -221,7 +222,7 @@ automatically: the flow is always **propose → confirm → write**.
    - For AI blocks: match `project_hint` (repo/dir name) case-insensitively
      against project names; on a hit set `project`. For Calendar blocks with no
      hint, leave `project=null` for now.
-   - Fallback to `sources.toggl.default_project_id` /
+   - Fallback to `sources.toggl.project_id` /
      `session-tracker` `default_project_id` if no match (may be null).
    - If still unresolved, set `project=null` and add `'project?'` to
      `origin_marks` — the review (step 8) will force the user to pick before this
@@ -279,6 +280,9 @@ automatically: the flow is always **propose → confirm → write**.
        `~<m>m (chybí)`.
    - `commit-only` blocks (`minutes=null`) skip coverage math (nothing to
      measure) and always appear, flagged to fill in.
+   - ClickUp coverage is bucketed per (project, day), not per-task, so
+     same-project same-day ClickUp time can mask a distinct task's block — the
+     `reconciled_tag` idempotency check (step 9) is the finer backstop.
 
 8. **Review — the heart of "confirm".** First print a **grouped table**
    (by project, then day), each row: proposed minutes + origin label +
@@ -307,11 +311,16 @@ automatically: the flow is always **propose → confirm → write**.
      a `task_id` (AI sessions / commits / meetings have no inherent ClickUp
      task). So for each block the user approves for a ClickUp write, prompt them
      to pick the target ClickUp task — offer a shortlist from
-     `clickup_filter_tasks` (assigned to the user, active) via `AskUserQuestion`,
+     `clickup_filter_tasks` (filtered by `assignee=<sources.clickup.member_id>`,
+     active) via `AskUserQuestion`,
      or let them paste a task ID / custom ID (e.g. `DEV-1234`). Store it as the
      block's `clickup_task_id`. A block **CANNOT** be approved for a ClickUp
      write without a `clickup_task_id`. (Toggl writes need no task — this gate
      applies only to the ClickUp sink.)
+   - Choosing **Vše** approves every item in the group but does **not**
+     bypass the gates above: any gated item (a `?` duration, a `project?`
+     mark, or a required `clickup_task_id`) still forces its per-item prompt
+     — "Vše" cannot manufacture a missing value.
    - Offer **"+ přidat ruční položku"** (phone call): ask start, duration,
      project, description → append as `source='manual'`, `origin='manual'`,
      fully specified.
@@ -330,16 +339,21 @@ automatically: the flow is always **propose → confirm → write**.
    **Toggl** — `POST /api/v9/workspaces/<wid>/time_entries`. Use the **exact
    auth pattern proven in `session-tracker`'s `/log-entry`**: Basic auth via
    `curl --config -` fed on stdin (so the key stays out of argv), with the
-   credential line `user = "<token>:api_token"`. Body carries `start` (UTC ISO),
-   `duration` (seconds), `description`, `project_id` (only when resolved),
-   `billable` (from `sink.billable`), and `tags` including `sink.reconciled_tag`:
+   credential line `user = "<token>:api_token"`. `duration` is
+   `round(minutes) * 60` (seconds; `minutes` is the approved per-item value).
+   If the block's `end` is null (commit-only or manual items filled in without
+   an end time), derive it with `date` as `start + duration` before building
+   the payload. Body carries `start` (UTC ISO), `stop` (UTC ISO, the derived or
+   original end), `duration` (seconds), `description`, `project_id` (only when
+   resolved), `billable` (from `sink.billable`), and `tags` including
+   `sink.reconciled_tag` — mirroring `/log-entry`'s Toggl body:
    ```bash
    KEY=<toggl api_key read into a shell var, not echoed>
    printf 'user = "%s:api_token"\n' "$KEY" | curl -sS --config - \
      -H "Content-Type: application/json" \
      -X POST "https://api.track.toggl.com/api/v9/workspaces/<wid>/time_entries" \
      --data-binary '{"created_with":"work-reconcile","workspace_id":<wid>,
-       "start":"<utc>","duration":<secs>,"description":"<desc>",
+       "start":"<utc>","stop":"<utc_end>","duration":<secs>,"description":"<desc>",
        "billable":<bool>,"tags":["<reconciled_tag>"]}'
    ```
    (Add `"project_id":<pid>` only when a project was resolved.)
