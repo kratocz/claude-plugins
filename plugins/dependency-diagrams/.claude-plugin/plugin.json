@@ -1,0 +1,6 @@
+{
+  "name": "dependency-diagrams",
+  "version": "0.1.0",
+  "description": "Generate task-dependency diagrams (full graph, group overview, per-cluster details) from any tracker — ClickUp, GitHub, Jira, or a CSV/JSON export — as draw.io + SVG/PNG dated snapshots",
+  "author": { "name": "Petr Kratochvíl", "url": "https://krato.cz/" }
+}

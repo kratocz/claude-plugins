@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "dependency-diagrams",
+      "source": "./plugins/dependency-diagrams",
+      "description": "Generate task-dependency diagrams (full graph, group overview, per-cluster details) from any tracker — ClickUp, GitHub, Jira, or a CSV/JSON export — as draw.io + SVG/PNG dated snapshots",
+      "version": "0.1.0",
+      "added": "2026-07-10"
+    },
+    {
       "name": "retro",
       "source": "./plugins/retro",
       "description": "Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates",
