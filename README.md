@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [kodex](./plugins/kodex) | 🟢 | 🟢 | 🟡 | Thinking codex for AI agents — 15 rules + pre-delivery self-test injected into every session (epistemics, decisions, output, learning loop) | 2026-07-10 |
 | [dependency-diagrams](./plugins/dependency-diagrams) | 🟢 | 🟢 | 🟡 | Generate task-dependency diagrams (full graph, group overview, per-cluster details) from any tracker — ClickUp, GitHub, Jira, or a CSV/JSON export — as draw.io + SVG/PNG dated snapshots | 2026-07-10 |
 | [retro](./plugins/retro) | 🟢 | 🟢 | 🟢 | Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates | 2026-06-10 |
 | [claude-statusline-state](./plugins/claude-statusline-state) | 🟢 | 🟢 | 🔴 | Publish per-session Claude Code lifecycle state (idle/working/waiting) to a file, ready to render as an extra line in your statusline | 2026-06-09 |
@@ -36,6 +37,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install kodex@kratocz
 /plugin install dependency-diagrams@kratocz
 /plugin install retro@kratocz
 /plugin install claude-statusline-state@kratocz
