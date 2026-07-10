@@ -36,6 +36,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install dependency-diagrams@kratocz
 /plugin install retro@kratocz
 /plugin install claude-statusline-state@kratocz
 /plugin install work@kratocz
