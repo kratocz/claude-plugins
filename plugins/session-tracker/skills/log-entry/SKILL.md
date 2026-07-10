@@ -2,7 +2,7 @@
 name: log-entry
 description: Log a retroactive (already finished) time entry to the configured tracker. Use when the user says "/log-entry", "log this to Toggl/Clockify", "add a time entry for ...", "track 2 hours retroactively", "zaloguj to do Toggl", or names a past time window they want recorded.
 argument-hint: [time-window] [description]
-version: 1.5.0
+version: 1.6.0
 allowed-tools: Read, Bash
 ---
 

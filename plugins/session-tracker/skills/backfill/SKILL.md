@@ -2,7 +2,7 @@
 name: backfill
 description: Fill gaps in today's time tracking from the current session's transcript. Use when the user says "/backfill", "doplň díry v Togglu", "backfill Toggl gaps", "doplň do Toggl práci na tomto", "fill in missing time for this session", or asks whether today's tracked time matches the session.
 argument-hint: [date]
-version: 1.5.0
+version: 1.6.0
 allowed-tools: Read, Bash
 ---
 

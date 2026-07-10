@@ -1,7 +1,7 @@
 ---
 name: setup-tracker
 description: Configure the session-tracker plugin. Use when the user wants to set up time tracking, configure Toggl or Clockify, run initial setup, says "/setup-tracker", or when start-session fails because config is missing.
-version: 1.5.0
+version: 1.6.0
 allowed-tools: Read, Write, Bash
 ---
 
