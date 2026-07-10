@@ -21,8 +21,11 @@ Configure session-tracker to connect to a time tracking service.
 
    **Toggl:**
    ```bash
-   curl -s -u "<api_key>:api_token" https://api.track.toggl.com/api/v9/workspaces
+   KEY=<api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
+     https://api.track.toggl.com/api/v9/workspaces
    ```
+   (The stdin `--config` trick keeps the key out of argv and sidesteps sandboxes that rewrite colon-bearing arguments like `-u user:token` into file paths.)
 
    **Clockify:**
    ```bash
@@ -41,7 +44,9 @@ Configure session-tracker to connect to a time tracking service.
 
    **Toggl projects:**
    ```bash
-   curl -s -u "<api_key>:api_token" "https://api.track.toggl.com/api/v9/workspaces/<workspace_id>/projects?active=true"
+   KEY=<api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
+     "https://api.track.toggl.com/api/v9/workspaces/<workspace_id>/projects?active=true"
    ```
 
    **Clockify projects:**

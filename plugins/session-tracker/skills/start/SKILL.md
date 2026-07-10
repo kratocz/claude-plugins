@@ -28,10 +28,11 @@ Start a new time tracking session in the configured backend.
 
    ### Toggl Track
    ```bash
-   curl -s -u "<config.toggl.api_key>:api_token" \
+   KEY=<config.toggl.api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
      https://api.track.toggl.com/api/v9/me/time_entries/current
    ```
-   (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running".)
+   (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running". The stdin `--config` trick keeps the key out of argv **and** sidesteps sandboxes that rewrite colon-bearing arguments — Claude Code's Bash sandbox turns `-u user:token` into a file path, so never pass the credential as a plain `-u` argument.)
 
    ### Clockify
    ```bash
@@ -55,7 +56,8 @@ Start a new time tracking session in the configured backend.
 
    ### Toggl Track
    ```bash
-   curl -s -u "<config.toggl.api_key>:api_token" \
+   KEY=<config.toggl.api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
      "https://api.track.toggl.com/api/v9/workspaces/<workspace_id>/projects?active=true"
    ```
 
@@ -74,10 +76,11 @@ Start a new time tracking session in the configured backend.
 
    ### Toggl Track
    ```bash
-   curl -s -u "<config.toggl.api_key>:api_token" \
+   KEY=<config.toggl.api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
      -H "Content-Type: application/json" \
      -X POST "https://api.track.toggl.com/api/v9/time_entries" \
-     -d '{"description":"<description>","workspace_id":<workspace_id>,"start":"<UTC time>","duration":-1,"billable":<billable>,"created_with":"session-tracker-claude-plugin"}'
+     --data-binary '{"description":"<description>","workspace_id":<workspace_id>,"start":"<UTC time>","duration":-1,"billable":<billable>,"created_with":"session-tracker-claude-plugin"}'
    ```
 
    ### Clockify

@@ -19,10 +19,13 @@ Stop the currently running time tracking session and report its duration.
 
    ### Toggl Track
    ```bash
-   curl -s -u "<config.toggl.api_key>:api_token" \
+   KEY=<config.toggl.api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
      https://api.track.toggl.com/api/v9/me/time_entries/current
    ```
-   If the response body is `null`, tell the user (in the configured language) that no session is currently running. Then stop. (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running".)
+   If the response body is `null`, tell the user (in the configured language) that no session is currently running. Then stop. (The path must include `/me/` — the legacy `api/v9/time_entries/current` returns HTTP 405 with an empty body, which is easy to misread as "no timer running". The stdin `--config` trick keeps the key out of argv and sidesteps sandboxes that rewrite colon-bearing arguments like `-u user:token` into file paths.)
+
+   Before stopping, verify the running entry is one this session started (match the description or remembered id) — a parallel session's timer may be running instead; stopping someone else's work needs the user's explicit OK.
 
    ### Clockify
    ```bash
@@ -35,7 +38,8 @@ Stop the currently running time tracking session and report its duration.
 
    ### Toggl Track
    ```bash
-   curl -s -u "<config.toggl.api_key>:api_token" \
+   KEY=<config.toggl.api_key read into a shell variable, not echoed>
+   printf 'user = "%s:api_token"\n' "$KEY" | curl -s --config - \
      -H "Content-Type: application/json" \
      -X PATCH "https://api.track.toggl.com/api/v9/workspaces/<workspace_id>/time_entries/<timer_id>/stop"
    ```
