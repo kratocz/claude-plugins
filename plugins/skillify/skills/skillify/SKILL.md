@@ -33,8 +33,11 @@ Parse the invocation argument:
   (default 10) past session transcripts of this project.
 - **any other text** → *targeted*: treat the text as a description of one
   workflow to capture; skip discovery and go straight to shaping that single
-  candidate (Phase 2, starting at the placement decision). This is also how
-  `/retro` delegates an approved skill candidate.
+  candidate (Phase 2, starting at the placement decision). Still consult
+  Phase 0's skill map first: if the description duplicates an existing
+  skill, say so instead of creating one (the No-duplicates rule applies
+  here too). This is also how `/retro` delegates an approved skill
+  candidate.
 
 ## Phase 0 — Context
 
