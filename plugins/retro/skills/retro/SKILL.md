@@ -212,9 +212,11 @@ Present candidate items grouped by area, then approve and apply:
      removed from `MEMORY.md` in the same step. Delete memory files with
      Bash `rm` on the exact path read in Phase 0 — never glob-delete.
    - Doc fixes (area C) are applied with Edit, one finding at a time.
-   - New project skills are scaffolded as `.claude/skills/<name>/SKILL.md`
-     with proper frontmatter (`name`, `description` with trigger phrases) and
-     a step-by-step body distilled from what the session actually did.
+   - Skill items (area E) follow area E's apply path: when the `skillify`
+     plugin is installed, area E delegates creation to it; otherwise scaffold
+     the new project skill as `.claude/skills/<name>/SKILL.md` with proper
+     frontmatter (`name`, `description` with trigger phrases) and a
+     step-by-step body distilled from what the session actually did.
 4. If an apply step fails, report it, leave the item unapplied, and continue
    with the rest.
 
