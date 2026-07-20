@@ -14,6 +14,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
 | Plugin | Linux | macOS | Windows | Description | Added |
 |---|:---:|:---:|:---:|---|---|
+| [skillify](./plugins/skillify) | 🟢 | 🟢 | 🟢 | Analyze this session (and, on demand, past transcripts) for repeatable workflows worth capturing as a skill, propose candidates, and create the approved ones | 2026-07-17 |
 | [kodex](./plugins/kodex) | 🟢 | 🟢 | 🟡 | Thinking codex for AI agents — 15 rules + pre-delivery self-test injected into every session (epistemics, decisions, output, learning loop) | 2026-07-10 |
 | [dependency-diagrams](./plugins/dependency-diagrams) | 🟢 | 🟢 | 🟡 | Generate task-dependency diagrams (full graph, group overview, per-cluster details) from any tracker — ClickUp, GitHub, Jira, or a CSV/JSON export — as draw.io + SVG/PNG dated snapshots | 2026-07-10 |
 | [retro](./plugins/retro) | 🟢 | 🟢 | 🟢 | Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates | 2026-06-10 |
@@ -37,6 +38,7 @@ Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 ## Install a plugin
 
 ```
+/plugin install skillify@kratocz
 /plugin install kodex@kratocz
 /plugin install dependency-diagrams@kratocz
 /plugin install retro@kratocz

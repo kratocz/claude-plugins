@@ -6,6 +6,13 @@
   },
   "plugins": [
     {
+      "name": "skillify",
+      "source": "./plugins/skillify",
+      "description": "Analyze this session (and, on demand, past transcripts) for repeatable workflows worth capturing as a skill, propose candidates, and create the approved ones",
+      "version": "0.1.0",
+      "added": "2026-07-17"
+    },
+    {
       "name": "kodex",
       "source": "./plugins/kodex",
       "description": "Thinking codex for AI agents — 15 rules + pre-delivery self-test injected into every session (epistemics, decisions, output, learning loop)",
