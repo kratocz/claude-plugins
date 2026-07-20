@@ -1,6 +1,6 @@
 {
   "name": "retro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates",
   "author": { "name": "Petr Kratochvíl", "url": "https://krato.cz/" }
 }

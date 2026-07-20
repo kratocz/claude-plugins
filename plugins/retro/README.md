@@ -27,7 +27,7 @@ applied without your approval:
 | B | Session → AGENTS.md | records non-obvious learnings from the current conversation |
 | C | Docs audit | outdated claims in the project's `*.md` files (checked by a subagent, reported as `file:line` with a suggested fix) |
 | D | Memory cleanup | deletes or corrects memories contradicted by reality |
-| E | Skills | new skills for repeated multi-prompt workflows; edits to skills that misfired |
+| E | Skills | new skills for repeated multi-prompt workflows; edits to skills that misfired (uses skillify when installed, otherwise scaffolds directly) |
 | F | Hooks | hook rules for repeatedly corrected unwanted actions (uses hookify when installed, otherwise proposes the settings entry directly) |
 | G | Permissions | allowlist entries for commands you approved repeatedly |
 

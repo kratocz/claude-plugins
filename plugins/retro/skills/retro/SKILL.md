@@ -1,7 +1,7 @@
 ---
 name: retro
 description: Session retrospective — turn this session's learnings into durable improvements. Migrates memory facts to AGENTS.md, captures session learnings, audits project *.md docs for staleness, cleans stale memories, proposes new or improved skills, hooks, and permission allowlist entries, and learns from blocked or guardrail-gated actions. Use when the user says "/retro", "retrospektiva", "udělej retro", or asks to consolidate what was learned in this session.
-version: 0.2.0
+version: 0.3.0
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, Task, AskUserQuestion, Skill
 ---
 
@@ -116,6 +116,14 @@ session → propose deletion or correction. A memory that merely duplicates the
 target knowledge file is also stale → propose deletion.
 
 ### E. Skills — new and improved
+
+**On apply, delegate to skillify when installed.** If the `skillify` plugin is
+available (its skill appears in your available-skills list), hand each approved
+skill candidate to it — invoke `skillify:skillify` with a one-line description
+of the candidate (its targeted mode); skillify then handles placement,
+scaffolding, and the source-repo rules below. If skillify is not installed,
+follow the guidance below yourself. Detection during this phase is unchanged
+either way.
 
 - **New skill:** the session contains a repeated or clearly repeatable
   multi-prompt workflow (the user drove you through the same shape of work

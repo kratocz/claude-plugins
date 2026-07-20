@@ -30,7 +30,7 @@
       "name": "retro",
       "source": "./plugins/retro",
       "description": "Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "added": "2026-06-10"
     },
     {
