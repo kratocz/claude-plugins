@@ -2,7 +2,7 @@
 
 ## Project overview
 
-`claude-plugins` is a Claude Code plugin marketplace. It catalogs plugins published by Petr Kratochvíl.
+`claude-plugins` is a Claude Code plugin marketplace. It catalogs plugins published by Petr Kratochvíl that genuinely need Claude Code's plugin mechanism (lifecycle hooks, statusline). Skill-only plugins were moved to [kratocz/skills](https://github.com/kratocz/skills) (portable Agent Skills layout, installable via `npx skills add kratocz/skills`) — do not add new skill-only plugins here.
 
 ## Structure
 
