@@ -1,9 +1,0 @@
-{
-  "name": "conventional-commit",
-  "version": "0.1.0",
-  "description": "Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs)",
-  "author": {
-    "name": "Petr Kratochvíl",
-    "url": "https://krato.cz/"
-  }
-}

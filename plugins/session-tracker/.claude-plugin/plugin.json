@@ -1,6 +1,0 @@
-{
-  "name": "session-tracker",
-  "version": "1.6.0",
-  "description": "Start and stop time tracking sessions in Toggl Track or Clockify.",
-  "author": { "name": "Petr Kratochvíl", "url": "https://krato.cz/" }
-}

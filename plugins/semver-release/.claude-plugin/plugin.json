@@ -1,9 +1,0 @@
-{
-  "name": "semver-release",
-  "version": "0.1.0",
-  "description": "Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release",
-  "author": {
-    "name": "Petr Kratochvíl",
-    "url": "https://krato.cz/"
-  }
-}

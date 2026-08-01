@@ -6,88 +6,11 @@
   },
   "plugins": [
     {
-      "name": "skillify",
-      "source": "./plugins/skillify",
-      "description": "Analyze this session (and, on demand, past transcripts) for repeatable workflows worth capturing as a skill, propose candidates, and create the approved ones",
-      "version": "0.1.0",
-      "added": "2026-07-17"
-    },
-    {
-      "name": "kodex",
-      "source": "./plugins/kodex",
-      "description": "Thinking codex for AI agents — 15 rules + pre-delivery self-test injected into every session (epistemics, decisions, output, learning loop)",
-      "version": "0.1.0",
-      "added": "2026-07-10"
-    },
-    {
-      "name": "dependency-diagrams",
-      "source": "./plugins/dependency-diagrams",
-      "description": "Generate task-dependency diagrams (full graph, group overview, per-cluster details) from any tracker — ClickUp, GitHub, Jira, or a CSV/JSON export — as draw.io + SVG/PNG dated snapshots",
-      "version": "0.1.0",
-      "added": "2026-07-10"
-    },
-    {
-      "name": "retro",
-      "source": "./plugins/retro",
-      "description": "Session retrospective — migrate memory facts to AGENTS.md, capture session learnings, audit docs freshness, propose skills/hooks/permission updates",
-      "version": "0.3.0",
-      "added": "2026-06-10"
-    },
-    {
       "name": "claude-statusline-state",
       "source": "./plugins/claude-statusline-state",
       "description": "Publish per-session Claude Code lifecycle state (idle/working/waiting) to a file, ready to render as an extra line in your statusline",
       "version": "1.0.0",
       "added": "2026-06-09"
-    },
-    {
-      "name": "work",
-      "source": "./plugins/work",
-      "description": "Daily work orchestration — morning briefing, mid-day diff, end-of-day summary, and a standup recap (Toggl + git + GitHub) across Todoist/ClickUp/GitHub/Calendar",
-      "version": "0.3.0",
-      "added": "2026-06-03"
-    },
-    {
-      "name": "dockerize",
-      "source": "./plugins/dockerize",
-      "description": "Add Docker to a project: multi-stage Dockerfile, .dockerignore, optional docker-compose.yml with detected services",
-      "version": "0.1.0",
-      "added": "2026-06-01"
-    },
-    {
-      "name": "launchpad-fix",
-      "source": "./plugins/launchpad-fix",
-      "description": "Re-register macOS apps missing from Launchpad with Launch Services and reset the Dock",
-      "version": "0.1.0",
-      "added": "2026-06-01"
-    },
-    {
-      "name": "semver-release",
-      "source": "./plugins/semver-release",
-      "description": "Cut a semver release from Conventional Commits: bump version, update CHANGELOG.md, tag, push, optional GitHub release",
-      "version": "0.1.0",
-      "added": "2026-06-01"
-    },
-    {
-      "name": "conventional-commit",
-      "source": "./plugins/conventional-commit",
-      "description": "Create a Conventional Commits message from the staged diff (type, optional scope, subject, body for non-trivial diffs)",
-      "version": "0.1.0",
-      "added": "2026-06-01"
-    },
-    {
-      "name": "project-init",
-      "source": "./plugins/project-init",
-      "description": "Bootstrap a new project: .gitignore, AGENTS.md, CLAUDE.md, README.md, initial commit, optional GitHub remote",
-      "version": "0.1.1",
-      "added": "2026-05-30"
-    },
-    {
-      "name": "code-review",
-      "source": "./plugins/code-review",
-      "description": "Structured code review with severity codes (Cx/Mx/mx/nx), per-round findings files, and GitHub posting",
-      "version": "0.1.0",
-      "added": "2026-05-30"
     },
     {
       "name": "tmux-hooks",
@@ -97,32 +20,11 @@
       "added": "2026-05-16"
     },
     {
-      "name": "mikrotik-audit",
-      "source": "./plugins/mikrotik-audit",
-      "description": "Read-only security audit for Mikrotik RouterOS devices via SSH",
-      "version": "0.1.0",
-      "added": "2026-04-20"
-    },
-    {
       "name": "session-log",
       "source": "./plugins/session-log",
       "description": "Save a structured summary of each Claude Code session to a markdown file",
       "version": "1.0.0",
       "added": "2026-04-19"
-    },
-    {
-      "name": "session-tracker",
-      "source": "./plugins/session-tracker",
-      "description": "Start and stop time tracking sessions in Toggl Track or Clockify",
-      "version": "1.6.0",
-      "added": "2026-04-09"
-    },
-    {
-      "name": "second-opinion",
-      "source": "./plugins/second-opinion",
-      "description": "Get a second opinion from Gemini or GPT on any important topic or decision",
-      "version": "1.0.0",
-      "added": "2026-04-04"
     },
     {
       "name": "desktop-notify",
