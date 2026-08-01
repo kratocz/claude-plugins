@@ -1,12 +1,16 @@
 # claude-plugins
 
-Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/) — plugins that genuinely need Claude Code's plugin mechanism (lifecycle hooks, statusline integration).
+Claude Code plugin marketplace by [Petr Kratochvíl](https://krato.cz/).
 
-> **Looking for the skills** (code-review, work-\*, tracker-\*, kodex, …)? They moved to [kratocz/skills](https://github.com/kratocz/skills) — a harness-portable [Agent Skills](https://agentskills.io/) collection that works in Claude Code, Codex, Antigravity, opencode, Copilot CLI, and Gemini CLI:
->
-> ```bash
-> npx skills add kratocz/skills
-> ```
+## 📦 Most of this repo moved → [kratocz/skills](https://github.com/kratocz/skills)
+
+The skills that used to be distributed here as plugins — code-review, conventional-commit, dockerize, semver-release, init-project, mikrotik-audit, dependency-diagrams, second-opinion, skillify, retro, kodex, the `work-*` suite, and the `tracker-*` suite — now live in **[kratocz/skills](https://github.com/kratocz/skills)**: a portable [Agent Skills](https://agentskills.io/) collection that works in Claude Code, Codex, Antigravity, opencode, Copilot CLI, Gemini CLI, and any other agent supporting the standard. One command, no plugin marketplace needed:
+
+```bash
+npx skills add kratocz/skills
+```
+
+This repository keeps only the plugins that genuinely need Claude Code's plugin mechanism (lifecycle hooks, statusline integration).
 
 ## Add this marketplace
 
